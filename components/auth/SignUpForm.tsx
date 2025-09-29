@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, Input, Card, Form, FormRow, Divider, Logo } from '@/components/ui';
+import { Button, Input, Form, FormRow, Divider, Logo, AuthLayout } from '@/components/ui';
 import { spacing } from '@/lib/design-system';
 
 interface SignUpFormProps {
@@ -145,37 +145,21 @@ export function SignUpForm({ onSubmit, onLoginClick }: SignUpFormProps) {
     setIsLoading(false);
   };
 
-  const containerStyle = {
-    minHeight: '100vh',
-    display: 'flex',
-    flexDirection: 'column' as const,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: spacing[4],
-  };
-
-  const formContainerStyle = {
-    width: '100%',
-    maxWidth: '450px',
-  };
-
   const logoContainerStyle = {
     marginBottom: spacing[8],
   };
 
   return (
-    <div style={containerStyle}>
-      <div style={formContainerStyle}>
-        <Card>
-          <div style={logoContainerStyle}>
-            <Logo
-              size="md"
-              animated={true}
-              showText={true}
-              title="회원가입"
-              subtitle="AI 운동 트레이너와 함께 시작하세요"
-            />
-          </div>
+    <AuthLayout>
+      <div style={logoContainerStyle}>
+        <Logo
+          size="md"
+          animated={true}
+          showText={true}
+          title="회원가입"
+          subtitle="AI 운동 트레이너와 함께 시작하세요"
+        />
+      </div>
 
           <Form onSubmit={handleSubmit}>
             <Input
@@ -311,8 +295,6 @@ export function SignUpForm({ onSubmit, onLoginClick }: SignUpFormProps) {
           >
             로그인
           </Button>
-        </Card>
-      </div>
-    </div>
+    </AuthLayout>
   );
 }

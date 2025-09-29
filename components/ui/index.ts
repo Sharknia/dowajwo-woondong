@@ -13,3 +13,5 @@ export { Form, FormGroup, FormRow } from './Form';
 export { Divider } from './Divider';
 
 export { Logo } from './Logo';
+
+export { AuthLayout } from './AuthLayout';
