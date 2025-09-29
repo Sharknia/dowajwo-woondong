@@ -28,33 +28,87 @@ AI 기반 운동 추천 모듈 프로젝트 설정
 
 ## 🎯 핵심 기능
 
+### 현재 구현된 기능
+1. **사용자 인증 시스템**
+   - 이메일/비밀번호 로그인
+   - 자동 로그인 기능
+   - 폼 유효성 검증
+
+2. **디자인 시스템**
+   - 애플워치 운동 앱 스타일 UI
+   - 다크/라이트 모드 지원
+   - 네온 그린 테마 색상
+   - 모바일 최적화 인터페이스
+
+### 계획된 AI 기능
 1. **운동 스케줄 추천**: 과거 운동 데이터 기반 차기 운동 계획 생성
 2. **운동 피드백**: 수행한 운동에 대한 AI 분석 및 개선점 제공
 3. **점진적 과부하**: 과학적 원칙 기반 운동 강도 조절
 4. **회복 관리**: 근육 피로도 고려한 균형 잡힌 계획
 
-## 🏗️ 모듈 구조
+## 🏗️ 프로젝트 구조
 
 ```
 /
-├── workout-types.ts        # 운동 데이터 타입 정의
-├── ai-trainer.ts          # AI 트레이너 서비스
-└── nextjs-integration-example.md  # 통합 가이드
+├── app/
+│   ├── login/              # 로그인 페이지
+│   └── api/workout/        # 운동 API 엔드포인트
+├── components/
+│   ├── auth/               # 인증 관련 컴포넌트
+│   │   └── LoginForm.tsx   # 로그인 폼 컴포넌트
+│   └── WorkoutRecommendation.tsx  # 운동 추천 컴포넌트
+├── contexts/
+│   └── ThemeContext.tsx    # 다크모드 테마 컨텍스트
+├── lib/
+│   ├── design-system/      # 디자인 시스템
+│   │   ├── colors.ts       # 색상 팔레트
+│   │   ├── typography.ts   # 타이포그래피
+│   │   ├── spacing.ts      # 간격 시스템
+│   │   ├── shadows.ts      # 그림자 효과
+│   │   └── index.ts        # 디자인 시스템 내보내기
+│   ├── workout-types.ts    # 운동 데이터 타입 정의
+│   └── ai-trainer.ts       # AI 트레이너 서비스
+├── docs/
+│   └── DESIGN_SYSTEM.md    # 디자인 시스템 문서
+└── document/
+    └── PROJECT_SETUP.md    # 프로젝트 설정 문서
 ```
 
-### workout-types.ts
+### 핵심 모듈
+
+#### workout-types.ts
 - `WorkoutData`: 운동 데이터 메인 인터페이스
 - `DayLog`: 일별 운동 로그
 - `ExerciseSession`: 운동별 세션 데이터
 - `SetData`: 세트별 상세 데이터
 - 유틸리티: 데이터 검증, 정규화, 샘플 생성
 
-### ai-trainer.ts
+#### ai-trainer.ts
 - `AITrainer`: Gemini API 통합 클래스
 - `getWorkoutRecommendation()`: 운동 추천
 - `getWorkoutFeedback()`: 피드백 생성
 - 에러 처리 및 재시도 로직
 - 환경변수 기반 설정
+
+### UI 컴포넌트
+
+#### LoginForm.tsx
+- 이메일/비밀번호 로그인
+- 자동 로그인 설정
+- 폼 유효성 검증
+- 애플워치 스타일 디자인
+- 다크모드 지원
+
+#### ThemeContext.tsx
+- 다크/라이트 모드 전환
+- 시스템 테마 감지
+- 테마 설정 저장
+
+### 디자인 시스템
+- 애플워치 운동 앱 스타일
+- 네온 그린 강조 색상
+- 다크 모드 최적화
+- 모바일 우선 반응형 디자인
 
 ## 🔧 개발 가이드라인
 
