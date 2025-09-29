@@ -53,9 +53,6 @@ export function SignUpForm({ onSubmit, onLoginClick }: SignUpFormProps) {
     if (password.length < 8) {
       return '비밀번호는 8자 이상이어야 합니다';
     }
-    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-      return '비밀번호는 대문자, 소문자, 숫자를 포함해야 합니다';
-    }
     return '';
   };
 
@@ -111,7 +108,6 @@ export function SignUpForm({ onSubmit, onLoginClick }: SignUpFormProps) {
     if (isAvailable) {
       setIsEmailVerified(true);
       setErrors({ ...errors, email: undefined });
-      alert('사용 가능한 이메일입니다.');
     } else {
       setIsEmailVerified(false);
       setErrors({ ...errors, email: '이미 사용 중인 이메일입니다.' });
@@ -177,34 +173,36 @@ export function SignUpForm({ onSubmit, onLoginClick }: SignUpFormProps) {
               fullWidth
             />
 
-            <FormRow gap="sm">
-              <div style={{ flex: 1 }}>
-                <Input
-                  label="이메일"
-                  type="email"
-                  value={email}
-                  onChange={(e) => handleEmailChange(e.target.value)}
-                  error={errors.email}
-                  success={isEmailVerified && !errors.email ? '사용 가능한 이메일입니다' : undefined}
-                  placeholder="example@email.com"
-                  autoComplete="email"
-                  disabled={isLoading || isEmailVerified}
-                  fullWidth
-                />
-              </div>
-              <div style={{ paddingTop: '28px' }}>
-                <Button
-                  type="button"
-                  variant={isEmailVerified ? "secondary" : "outline"}
-                  size="md"
-                  onClick={handleEmailCheck}
-                  disabled={isCheckingEmail || isLoading || isEmailVerified}
-                  isLoading={isCheckingEmail}
-                >
-                  {isCheckingEmail ? '확인 중...' : isEmailVerified ? '확인완료' : '중복확인'}
-                </Button>
-              </div>
-            </FormRow>
+            <div>
+              <FormRow gap="sm" align="start">
+                <div style={{ flex: 1 }}>
+                  <Input
+                    label="이메일"
+                    type="email"
+                    value={email}
+                    onChange={(e) => handleEmailChange(e.target.value)}
+                    error={errors.email}
+                    success={isEmailVerified && !errors.email ? '사용 가능한 이메일입니다' : undefined}
+                    placeholder="example@email.com"
+                    autoComplete="email"
+                    disabled={isLoading || isEmailVerified}
+                    fullWidth
+                  />
+                </div>
+                <div style={{ paddingTop: '28px' }}>
+                  <Button
+                    type="button"
+                    variant={isEmailVerified ? "secondary" : "outline"}
+                    size="md"
+                    onClick={handleEmailCheck}
+                    disabled={isCheckingEmail || isLoading || isEmailVerified}
+                    isLoading={isCheckingEmail}
+                  >
+                    {isCheckingEmail ? '확인 중...' : isEmailVerified ? '확인완료' : '중복확인'}
+                  </Button>
+                </div>
+              </FormRow>
+            </div>
 
             <Input
               label="비밀번호"
@@ -215,7 +213,7 @@ export function SignUpForm({ onSubmit, onLoginClick }: SignUpFormProps) {
                 if (errors.password) setErrors({ ...errors, password: undefined });
               }}
               error={errors.password}
-              hint={!errors.password && password.length === 0 ? '대문자, 소문자, 숫자를 포함한 8자 이상' : undefined}
+              hint={!errors.password && password.length === 0 ? '8자 이상 입력해주세요' : undefined}
               placeholder="••••••••"
               autoComplete="new-password"
               disabled={isLoading}
