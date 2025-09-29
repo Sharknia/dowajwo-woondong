@@ -20,9 +20,7 @@ export default function LoginPage() {
   };
 
   const handleSignUpClick = () => {
-    // TODO: Navigate to sign-up page when implemented
-    console.log('Navigate to sign-up page');
-    alert('회원가입 페이지는 아직 구현되지 않았습니다.');
+    router.push('/signup');
   };
 
   return (
