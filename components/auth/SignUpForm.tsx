@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useTheme } from '@/contexts/ThemeContext';
-import { colors, typography, spacing, borderRadius, shadows } from '@/lib/design-system';
+import { Button, Input, Card, Form, FormRow, Divider, Logo } from '@/components/ui';
+import { spacing } from '@/lib/design-system';
 
 interface SignUpFormProps {
   onSubmit?: (nickname: string, email: string, password: string) => void;
@@ -10,7 +10,6 @@ interface SignUpFormProps {
 }
 
 export function SignUpForm({ onSubmit, onLoginClick }: SignUpFormProps) {
-  const { theme } = useTheme();
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -26,8 +25,6 @@ export function SignUpForm({ onSubmit, onLoginClick }: SignUpFormProps) {
     password?: string;
     passwordConfirm?: string;
   }>({});
-
-  const isDark = theme === 'dark';
 
   const validateNickname = () => {
     if (!nickname) {
@@ -148,466 +145,173 @@ export function SignUpForm({ onSubmit, onLoginClick }: SignUpFormProps) {
     setIsLoading(false);
   };
 
-  const styles = {
-    container: {
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column' as const,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: spacing[4],
-      background: isDark ? colors.dark.background : colors.light.background,
-      transition: 'background 0.3s ease',
-    },
+  const containerStyle = {
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: spacing[4],
+  };
 
-    formCard: {
-      width: '100%',
-      maxWidth: '450px',
-      padding: spacing[8],
-      background: isDark ? colors.dark.surface : colors.light.surface,
-      borderRadius: borderRadius['2xl'],
-      boxShadow: isDark ? shadows.dark.xl : shadows.light.xl,
-    },
+  const formContainerStyle = {
+    width: '100%',
+    maxWidth: '450px',
+  };
 
-    logo: {
-      textAlign: 'center' as const,
-      marginBottom: spacing[8],
-    },
-
-    logoIcon: {
-      width: '80px',
-      height: '80px',
-      margin: '0 auto',
-      marginBottom: spacing[4],
-      background: colors.gradients.neonGlow,
-      borderRadius: borderRadius.full,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      boxShadow: shadows.glow.green,
-      animation: 'pulse 2s infinite',
-    },
-
-    title: {
-      fontSize: typography.fontSize['2xl'],
-      fontWeight: typography.fontWeight.bold,
-      color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-      marginBottom: spacing[2],
-    },
-
-    subtitle: {
-      fontSize: typography.fontSize.sm,
-      color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-      marginBottom: spacing[6],
-    },
-
-    form: {
-      display: 'flex',
-      flexDirection: 'column' as const,
-      gap: spacing[4],
-    },
-
-    inputGroup: {
-      display: 'flex',
-      flexDirection: 'column' as const,
-      gap: spacing[2],
-    },
-
-    label: {
-      fontSize: typography.fontSize.sm,
-      fontWeight: typography.fontWeight.medium,
-      color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-    },
-
-    inputWrapper: {
-      position: 'relative' as const,
-      display: 'flex',
-      gap: spacing[2],
-    },
-
-    input: {
-      width: '100%',
-      padding: `${spacing[3]} ${spacing[4]}`,
-      fontSize: typography.fontSize.base,
-      fontFamily: typography.fontFamily.sans,
-      background: isDark ? colors.dark.surfaceSecondary : colors.light.surfaceSecondary,
-      color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-      border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
-      borderRadius: borderRadius.lg,
-      outline: 'none',
-      transition: 'all 0.3s ease',
-    },
-
-    inputFocus: {
-      borderColor: colors.primary.neonGreen,
-      boxShadow: `0 0 0 3px ${isDark ? 'rgba(50, 215, 75, 0.2)' : 'rgba(50, 215, 75, 0.1)'}`,
-    },
-
-    inputError: {
-      borderColor: colors.utility.error,
-      boxShadow: `0 0 0 3px ${isDark ? 'rgba(255, 59, 48, 0.2)' : 'rgba(255, 59, 48, 0.1)'}`,
-    },
-
-    inputSuccess: {
-      borderColor: colors.utility.success,
-      boxShadow: `0 0 0 3px ${isDark ? 'rgba(52, 199, 89, 0.2)' : 'rgba(52, 199, 89, 0.1)'}`,
-    },
-
-    errorMessage: {
-      fontSize: typography.fontSize.xs,
-      color: colors.utility.error,
-      marginTop: spacing[1],
-    },
-
-    successMessage: {
-      fontSize: typography.fontSize.xs,
-      color: colors.utility.success,
-      marginTop: spacing[1],
-    },
-
-    passwordToggle: {
-      position: 'absolute' as const,
-      right: spacing[3],
-      top: '50%',
-      transform: 'translateY(-50%)',
-      background: 'transparent',
-      border: 'none',
-      color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
-      cursor: 'pointer',
-      padding: spacing[2],
-      fontSize: typography.fontSize.sm,
-    },
-
-    emailCheckButton: {
-      padding: `${spacing[3]} ${spacing[4]}`,
-      background: isDark ? colors.dark.surfaceTertiary : colors.light.surfaceTertiary,
-      color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-      fontSize: typography.fontSize.sm,
-      fontWeight: typography.fontWeight.medium,
-      border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)'}`,
-      borderRadius: borderRadius.lg,
-      cursor: isCheckingEmail ? 'not-allowed' : 'pointer',
-      whiteSpace: 'nowrap' as const,
-      transition: 'all 0.3s ease',
-      opacity: isCheckingEmail ? 0.7 : 1,
-    },
-
-    emailCheckButtonHover: {
-      background: colors.primary.neonGreen,
-      color: colors.text.dark.primary,
-      borderColor: colors.primary.neonGreen,
-    },
-
-    submitButton: {
-      marginTop: spacing[6],
-      padding: `${spacing[4]} ${spacing[6]}`,
-      background: colors.gradients.glowButton,
-      color: colors.text.dark.primary,
-      fontSize: typography.fontSize.base,
-      fontWeight: typography.fontWeight.semibold,
-      fontFamily: typography.fontFamily.sans,
-      border: 'none',
-      borderRadius: borderRadius.lg,
-      cursor: isLoading ? 'not-allowed' : 'pointer',
-      boxShadow: shadows.button.neonGreen,
-      transition: 'all 0.3s ease',
-      opacity: isLoading ? 0.7 : 1,
-    },
-
-    submitButtonHover: {
-      transform: 'translateY(-2px)',
-      boxShadow: shadows.button.neonGreenHover,
-    },
-
-    divider: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: spacing[4],
-      marginTop: spacing[6],
-      marginBottom: spacing[6],
-    },
-
-    dividerLine: {
-      flex: 1,
-      height: '1px',
-      background: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
-    },
-
-    dividerText: {
-      fontSize: typography.fontSize.sm,
-      color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
-    },
-
-    loginButton: {
-      width: '100%',
-      padding: `${spacing[4]} ${spacing[6]}`,
-      background: 'transparent',
-      color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-      fontSize: typography.fontSize.base,
-      fontWeight: typography.fontWeight.medium,
-      fontFamily: typography.fontFamily.sans,
-      border: `2px solid ${isDark ? colors.dark.surfaceTertiary : colors.light.surfaceTertiary}`,
-      borderRadius: borderRadius.lg,
-      cursor: 'pointer',
-      transition: 'all 0.3s ease',
-    },
-
-    loginButtonHover: {
-      borderColor: colors.primary.neonGreen,
-      color: colors.primary.neonGreen,
-      boxShadow: `0 0 10px ${isDark ? 'rgba(50, 215, 75, 0.3)' : 'rgba(50, 215, 75, 0.2)'}`,
-    },
-
-    passwordHint: {
-      fontSize: typography.fontSize.xs,
-      color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
-      marginTop: spacing[1],
-    },
+  const logoContainerStyle = {
+    marginBottom: spacing[8],
   };
 
   return (
-    <div style={styles.container}>
-      <style jsx global>{`
-        @keyframes pulse {
-          0% {
-            box-shadow: 0 0 20px rgba(50, 215, 75, 0.5), 0 0 40px rgba(50, 215, 75, 0.3);
-          }
-          50% {
-            box-shadow: 0 0 30px rgba(50, 215, 75, 0.7), 0 0 60px rgba(50, 215, 75, 0.5);
-          }
-          100% {
-            box-shadow: 0 0 20px rgba(50, 215, 75, 0.5), 0 0 40px rgba(50, 215, 75, 0.3);
-          }
-        }
-
-        input:-webkit-autofill,
-        input:-webkit-autofill:hover,
-        input:-webkit-autofill:focus {
-          -webkit-box-shadow: 0 0 0 30px ${isDark ? colors.dark.surfaceSecondary : colors.light.surfaceSecondary} inset !important;
-          -webkit-text-fill-color: ${isDark ? colors.text.dark.primary : colors.text.light.primary} !important;
-        }
-      `}</style>
-
-      <div style={styles.formCard}>
-        <div style={styles.logo}>
-          <div style={styles.logoIcon}>
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="white"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M13 4l7 7-7 7M6 17l7-7-7-7" />
-            </svg>
+    <div style={containerStyle}>
+      <div style={formContainerStyle}>
+        <Card>
+          <div style={logoContainerStyle}>
+            <Logo
+              size="md"
+              animated={true}
+              showText={true}
+              title="회원가입"
+              subtitle="AI 운동 트레이너와 함께 시작하세요"
+            />
           </div>
-          <h1 style={styles.title}>회원가입</h1>
-          <p style={styles.subtitle}>AI 운동 트레이너와 함께 시작하세요</p>
-        </div>
 
-        <form style={styles.form} onSubmit={handleSubmit}>
-          <div style={styles.inputGroup}>
-            <label style={styles.label} htmlFor="nickname">
-              닉네임
-            </label>
-            <input
-              id="nickname"
+          <Form onSubmit={handleSubmit}>
+            <Input
+              label="닉네임"
               type="text"
               value={nickname}
               onChange={(e) => {
                 setNickname(e.target.value);
                 if (errors.nickname) setErrors({ ...errors, nickname: undefined });
               }}
-              style={{
-                ...styles.input,
-                ...(errors.nickname ? styles.inputError : {}),
-              }}
+              error={errors.nickname}
               placeholder="2-20자 사이로 입력"
               autoComplete="username"
               disabled={isLoading}
+              fullWidth
             />
-            {errors.nickname && (
-              <span style={styles.errorMessage}>{errors.nickname}</span>
-            )}
-          </div>
 
-          <div style={styles.inputGroup}>
-            <label style={styles.label} htmlFor="email">
-              이메일
-            </label>
-            <div style={styles.inputWrapper}>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => handleEmailChange(e.target.value)}
-                style={{
-                  ...styles.input,
-                  flex: 1,
-                  ...(errors.email ? styles.inputError : {}),
-                  ...(isEmailVerified ? styles.inputSuccess : {}),
-                }}
-                placeholder="example@email.com"
-                autoComplete="email"
-                disabled={isLoading || isEmailVerified}
-              />
-              <button
-                type="button"
-                onClick={handleEmailCheck}
-                style={styles.emailCheckButton}
-                onMouseEnter={(e) => {
-                  if (!isCheckingEmail && !isEmailVerified) {
-                    Object.assign(e.currentTarget.style, styles.emailCheckButtonHover);
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  Object.assign(e.currentTarget.style, {
-                    background: isDark ? colors.dark.surfaceTertiary : colors.light.surfaceTertiary,
-                    color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-                    borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)',
-                  });
-                }}
-                disabled={isCheckingEmail || isLoading || isEmailVerified}
-              >
-                {isCheckingEmail ? '확인 중...' : isEmailVerified ? '확인완료' : '중복확인'}
-              </button>
-            </div>
-            {errors.email && (
-              <span style={styles.errorMessage}>{errors.email}</span>
-            )}
-            {isEmailVerified && !errors.email && (
-              <span style={styles.successMessage}>사용 가능한 이메일입니다</span>
-            )}
-          </div>
+            <FormRow gap="sm">
+              <div style={{ flex: 1 }}>
+                <Input
+                  label="이메일"
+                  type="email"
+                  value={email}
+                  onChange={(e) => handleEmailChange(e.target.value)}
+                  error={errors.email}
+                  success={isEmailVerified && !errors.email ? '사용 가능한 이메일입니다' : undefined}
+                  placeholder="example@email.com"
+                  autoComplete="email"
+                  disabled={isLoading || isEmailVerified}
+                  fullWidth
+                />
+              </div>
+              <div style={{ paddingTop: '28px' }}>
+                <Button
+                  type="button"
+                  variant={isEmailVerified ? "secondary" : "outline"}
+                  size="md"
+                  onClick={handleEmailCheck}
+                  disabled={isCheckingEmail || isLoading || isEmailVerified}
+                  isLoading={isCheckingEmail}
+                >
+                  {isCheckingEmail ? '확인 중...' : isEmailVerified ? '확인완료' : '중복확인'}
+                </Button>
+              </div>
+            </FormRow>
 
-          <div style={styles.inputGroup}>
-            <label style={styles.label} htmlFor="password">
-              비밀번호
-            </label>
-            <div style={{ ...styles.inputWrapper, position: 'relative' }}>
-              <input
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  if (errors.password) setErrors({ ...errors, password: undefined });
-                }}
-                style={{
-                  ...styles.input,
-                  paddingRight: spacing[12],
-                  ...(errors.password ? styles.inputError : {}),
-                }}
-                placeholder="••••••••"
-                autoComplete="new-password"
-                disabled={isLoading}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                style={styles.passwordToggle}
-                tabIndex={-1}
-              >
-                {showPassword ? '숨기기' : '보기'}
-              </button>
-            </div>
-            {!errors.password && password.length === 0 && (
-              <span style={styles.passwordHint}>
-                대문자, 소문자, 숫자를 포함한 8자 이상
-              </span>
-            )}
-            {errors.password && (
-              <span style={styles.errorMessage}>{errors.password}</span>
-            )}
-          </div>
-
-          <div style={styles.inputGroup}>
-            <label style={styles.label} htmlFor="passwordConfirm">
-              비밀번호 확인
-            </label>
-            <div style={{ ...styles.inputWrapper, position: 'relative' }}>
-              <input
-                id="passwordConfirm"
-                type={showPasswordConfirm ? 'text' : 'password'}
-                value={passwordConfirm}
-                onChange={(e) => {
-                  setPasswordConfirm(e.target.value);
-                  if (errors.passwordConfirm) setErrors({ ...errors, passwordConfirm: undefined });
-                }}
-                style={{
-                  ...styles.input,
-                  paddingRight: spacing[12],
-                  ...(errors.passwordConfirm ? styles.inputError : {}),
-                  ...(passwordConfirm && password === passwordConfirm ? styles.inputSuccess : {}),
-                }}
-                placeholder="••••••••"
-                autoComplete="new-password"
-                disabled={isLoading}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
-                style={styles.passwordToggle}
-                tabIndex={-1}
-              >
-                {showPasswordConfirm ? '숨기기' : '보기'}
-              </button>
-            </div>
-            {errors.passwordConfirm && (
-              <span style={styles.errorMessage}>{errors.passwordConfirm}</span>
-            )}
-            {!errors.passwordConfirm && passwordConfirm && password === passwordConfirm && (
-              <span style={styles.successMessage}>비밀번호가 일치합니다</span>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            style={styles.submitButton}
-            onMouseEnter={(e) => {
-              if (!isLoading) {
-                Object.assign(e.currentTarget.style, styles.submitButtonHover);
+            <Input
+              label="비밀번호"
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (errors.password) setErrors({ ...errors, password: undefined });
+              }}
+              error={errors.password}
+              hint={!errors.password && password.length === 0 ? '대문자, 소문자, 숫자를 포함한 8자 이상' : undefined}
+              placeholder="••••••••"
+              autoComplete="new-password"
+              disabled={isLoading}
+              fullWidth
+              rightIcon={
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: 'inherit'
+                  }}
+                  tabIndex={-1}
+                >
+                  {showPassword ? '숨기기' : '보기'}
+                </button>
               }
-            }}
-            onMouseLeave={(e) => {
-              Object.assign(e.currentTarget.style, {
-                transform: 'translateY(0)',
-                boxShadow: shadows.button.neonGreen,
-              });
-            }}
+              onRightIconClick={() => setShowPassword(!showPassword)}
+            />
+
+            <Input
+              label="비밀번호 확인"
+              type={showPasswordConfirm ? 'text' : 'password'}
+              value={passwordConfirm}
+              onChange={(e) => {
+                setPasswordConfirm(e.target.value);
+                if (errors.passwordConfirm) setErrors({ ...errors, passwordConfirm: undefined });
+              }}
+              error={errors.passwordConfirm}
+              success={!errors.passwordConfirm && passwordConfirm && password === passwordConfirm ? '비밀번호가 일치합니다' : undefined}
+              placeholder="••••••••"
+              autoComplete="new-password"
+              disabled={isLoading}
+              fullWidth
+              rightIcon={
+                <button
+                  type="button"
+                  onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: 'inherit'
+                  }}
+                  tabIndex={-1}
+                >
+                  {showPasswordConfirm ? '숨기기' : '보기'}
+                </button>
+              }
+              onRightIconClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
+            />
+
+            <div style={{ marginTop: spacing[4] }}>
+              <Button
+                type="submit"
+                variant="primary"
+                size="lg"
+                fullWidth
+                isLoading={isLoading}
+                disabled={isLoading}
+              >
+                {isLoading ? '가입 처리 중...' : '회원가입'}
+              </Button>
+            </div>
+          </Form>
+
+          <Divider text="이미 계정이 있으신가요?" margin="lg" />
+
+          <Button
+            variant="outline"
+            size="lg"
+            fullWidth
+            onClick={onLoginClick}
             disabled={isLoading}
           >
-            {isLoading ? '가입 처리 중...' : '회원가입'}
-          </button>
-        </form>
-
-        <div style={styles.divider}>
-          <div style={styles.dividerLine} />
-          <span style={styles.dividerText}>이미 계정이 있으신가요?</span>
-          <div style={styles.dividerLine} />
-        </div>
-
-        <button
-          type="button"
-          style={styles.loginButton}
-          onClick={onLoginClick}
-          onMouseEnter={(e) => {
-            Object.assign(e.currentTarget.style, styles.loginButtonHover);
-          }}
-          onMouseLeave={(e) => {
-            Object.assign(e.currentTarget.style, {
-              borderColor: isDark ? colors.dark.surfaceTertiary : colors.light.surfaceTertiary,
-              color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-              boxShadow: 'none',
-            });
-          }}
-          disabled={isLoading}
-        >
-          로그인
-        </button>
+            로그인
+          </Button>
+        </Card>
       </div>
     </div>
   );
