@@ -3,39 +3,62 @@
 import React, { useState } from 'react';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { WorkoutStartCard } from '@/components/workout/WorkoutStartCard';
-import { RecentWorkoutCard } from '@/components/workout/RecentWorkoutCard';
+import { WorkoutSessionCard } from '@/components/workout/WorkoutSessionCard';
 import { NavigationBar } from '@/components/ui/NavigationBar';
 import { useTheme } from '@/contexts/ThemeContext';
-import { colors, spacing } from '@/lib/design-system';
+import { colors, spacing, typography } from '@/lib/design-system';
+import type { WorkoutSession } from '@/types/workout';
 
 // 샘플 데이터 (나중에 API로 교체 예정)
-const sampleWorkouts = [
+const sampleWorkouts: WorkoutSession[] = [
   {
     id: '1',
     date: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), // 어제
-    exerciseName: '벤치 프레스',
-    duration: 45,
-    sets: 4,
-    reps: 10,
-    weight: 80,
+    totalDuration: 45,
+    exercises: [
+      {
+        id: 'ex1',
+        name: '벤치 프레스',
+        sets: [
+          { id: 'set1', weight: 80, reps: 12, completed: true },
+          { id: 'set2', weight: 80, reps: 10, completed: true },
+          { id: 'set3', weight: 80, reps: 8, completed: true },
+        ],
+      },
+      {
+        id: 'ex2',
+        name: '인클라인 벤치 프레스',
+        sets: [
+          { id: 'set4', weight: 60, reps: 12, completed: true },
+          { id: 'set5', weight: 60, reps: 10, completed: true },
+        ],
+      },
+    ],
   },
   {
     id: '2',
     date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(), // 3일 전
-    exerciseName: '스쿼트',
-    duration: 50,
-    sets: 5,
-    reps: 12,
-    weight: 100,
-  },
-  {
-    id: '3',
-    date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(), // 5일 전
-    exerciseName: '데드리프트',
-    duration: 40,
-    sets: 3,
-    reps: 8,
-    weight: 120,
+    totalDuration: 50,
+    exercises: [
+      {
+        id: 'ex3',
+        name: '스쿼트',
+        sets: [
+          { id: 'set6', weight: 100, reps: 12, completed: true },
+          { id: 'set7', weight: 100, reps: 10, completed: true },
+          { id: 'set8', weight: 100, reps: 8, completed: true },
+          { id: 'set9', weight: 100, reps: 8, completed: true },
+        ],
+      },
+      {
+        id: 'ex4',
+        name: '레그 프레스',
+        sets: [
+          { id: 'set10', weight: 150, reps: 15, completed: true },
+          { id: 'set11', weight: 150, reps: 12, completed: true },
+        ],
+      },
+    ],
   },
 ];
 
@@ -69,8 +92,8 @@ function HomeContent() {
     // TODO: 운동 시작 페이지로 이동
   };
 
-  const handleWorkoutClick = (workout: any) => {
-    console.log('운동 카드 클릭:', workout);
+  const handleSessionClick = () => {
+    console.log('운동 세션 클릭');
     // TODO: 운동 상세 페이지로 이동
   };
 
@@ -80,15 +103,29 @@ function HomeContent() {
     // TODO: 페이지 네비게이션 구현
   };
 
+  const recentWorkoutsTitleStyle: React.CSSProperties = {
+    fontSize: typography.fontSize.xl,
+    fontWeight: typography.fontWeight.bold,
+    color: isDark ? colors.text.dark.primary : colors.text.light.primary,
+    marginBottom: spacing[4],
+  };
+
   return (
     <div style={containerStyle}>
       <div style={contentStyle}>
         <WorkoutStartCard onStartWorkout={handleStartWorkout} />
-        <RecentWorkoutCard
-          workouts={sampleWorkouts}
-          onWorkoutClick={handleWorkoutClick}
-          maxItems={5}
-        />
+
+        <div>
+          <h2 style={recentWorkoutsTitleStyle}>최근 운동</h2>
+          {sampleWorkouts.map((session) => (
+            <div key={session.id} style={{ marginBottom: spacing[4] }}>
+              <WorkoutSessionCard
+                session={session}
+                onClick={handleSessionClick}
+              />
+            </div>
+          ))}
+        </div>
       </div>
       <NavigationBar
         activeItem={activeNavItem}
