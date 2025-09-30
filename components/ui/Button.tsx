@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
-import { colors, typography, spacing, borderRadius, shadows } from '@/lib/design-system';
+import { colors, typography, spacing, borderRadius, shadows, focus } from '@/lib/design-system';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
 export type ButtonSize = 'sm' | 'md' | 'lg';
@@ -33,6 +33,7 @@ export function Button({
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const [isHovered, setIsHovered] = React.useState(false);
+  const [isFocused, setIsFocused] = React.useState(false);
 
   const sizeStyles = {
     sm: {
@@ -109,12 +110,18 @@ export function Button({
     borderRadius: borderRadius.lg,
     cursor: disabled || isLoading ? 'not-allowed' : 'pointer',
     opacity: disabled || isLoading ? 0.6 : 1,
-    transition: 'all 0.3s ease',
+    transition: `all 0.3s ease, ${focus.transition}`,
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
     gap: spacing[2],
-    outline: 'none',
+    outline: isFocused && !disabled && !isLoading
+      ? (isDark ? focus.dark.outline : focus.light.outline)
+      : 'none',
+    outlineOffset: isFocused && !disabled && !isLoading ? '2px' : '0',
+    boxShadow: isFocused && !disabled && !isLoading
+      ? (isDark ? focus.dark.boxShadow : focus.light.boxShadow)
+      : variantStyles[variant].boxShadow,
     position: 'relative' as const,
     overflow: 'hidden',
   };
@@ -135,18 +142,22 @@ export function Button({
       disabled={disabled || isLoading}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
+      aria-busy={isLoading}
+      aria-disabled={disabled || isLoading}
       {...props}
     >
       {isLoading ? (
         <>
-          <span style={{ animation: 'spin 1s linear infinite' }}>⟳</span>
-          처리 중...
+          <span style={{ animation: 'spin 1s linear infinite' }} aria-hidden="true">⟳</span>
+          <span>처리 중...</span>
         </>
       ) : (
         <>
-          {leftIcon}
+          {leftIcon && <span aria-hidden="true">{leftIcon}</span>}
           {children}
-          {rightIcon}
+          {rightIcon && <span aria-hidden="true">{rightIcon}</span>}
         </>
       )}
       <style jsx>{`

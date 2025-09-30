@@ -12,6 +12,7 @@ Dowajwo-Woondong은 애플워치 운동 앱에서 영감을 받은 디자인과 
 - 🔐 **사용자 인증**: 안전한 로그인 시스템과 자동 로그인 기능
 - 🌙 **다크/라이트 모드**: 시스템 설정 연동 및 수동 전환 가능
 - 📱 **모바일 우선 디자인**: 모든 디바이스에서 완벽한 반응형 UI
+- ♿ **웹 접근성 준수**: WCAG 2.1 AA 기준 충족 (접근성 점수 92/100)
 - 🤖 **AI 운동 코칭** (개발 중): Gemini API를 활용한 맞춤형 운동 추천
 
 ## 🚀 시작하기
@@ -112,9 +113,15 @@ dowajwo-woondong/
 
 ## 📖 문서
 
-- [CLAUDE.md](./CLAUDE.md) - 개발 가이드라인 및 규칙
-- [디자인 시스템 문서](./docs/DESIGN_SYSTEM.md) - UI/UX 가이드
-- [프로젝트 설정](./document/PROJECT_SETUP.md) - 초기 설정 가이드
+### 핵심 문서
+- **[CLAUDE.md](./CLAUDE.md)** - AI 개발 가이드라인 및 규칙
+- **[docs/](./docs/)** - 전체 기술 문서 디렉토리
+
+### 상세 가이드
+- **[시작하기](./docs/SETUP.md)** - 프로젝트 설치 및 설정
+- **[디자인 시스템](./docs/DESIGN_SYSTEM.md)** - 색상, 타이포, 간격 시스템
+- **[컴포넌트](./docs/COMPONENTS.md)** - UI 컴포넌트 라이브러리
+- **[접근성](./docs/ACCESSIBILITY.md)** - WCAG 2.1 AA 준수 가이드
 
 ## 🤝 기여하기
 

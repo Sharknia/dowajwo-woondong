@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
-import { colors, spacing, borderRadius, shadows } from '@/lib/design-system';
+import { colors, spacing, borderRadius, shadows, focus } from '@/lib/design-system';
 
 interface CardProps {
   children: React.ReactNode;
@@ -10,6 +10,10 @@ interface CardProps {
   variant?: 'default' | 'elevated' | 'outlined';
   fullWidth?: boolean;
   className?: string;
+  onClick?: () => void;
+  tabIndex?: number;
+  role?: string;
+  'aria-label'?: string;
 }
 
 export function Card({
@@ -17,10 +21,16 @@ export function Card({
   padding = 'lg',
   variant = 'default',
   fullWidth = false,
-  className = ''
+  className = '',
+  onClick,
+  tabIndex,
+  role,
+  'aria-label': ariaLabel,
 }: CardProps) {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const [isFocused, setIsFocused] = React.useState(false);
+  const isInteractive = !!onClick;
 
   const paddingMap = {
     sm: spacing[4],
@@ -52,11 +62,31 @@ export function Card({
     padding: paddingMap[padding],
     borderRadius: borderRadius['2xl'],
     width: fullWidth ? '100%' : 'auto',
-    transition: 'all 0.3s ease',
+    transition: `all 0.3s ease, ${focus.transition}`,
+    cursor: isInteractive ? 'pointer' : 'default',
+    outline: isFocused && isInteractive
+      ? (isDark ? focus.dark.outline : focus.light.outline)
+      : 'none',
+    outlineOffset: isFocused && isInteractive ? '2px' : '0',
   };
 
   return (
-    <div style={cardStyle} className={className}>
+    <div
+      style={cardStyle}
+      className={className}
+      onClick={onClick}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
+      onKeyDown={(e) => {
+        if (isInteractive && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          onClick?.();
+        }
+      }}
+      tabIndex={isInteractive ? (tabIndex ?? 0) : undefined}
+      role={role || (isInteractive ? 'button' : undefined)}
+      aria-label={ariaLabel}
+    >
       {children}
     </div>
   );

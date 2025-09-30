@@ -6,7 +6,7 @@ import { spacing } from '@/lib/design-system';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
-  maxWidth?: '400px' | '450px' | '500px';
+  maxWidth?: '400px' | '420px' | '450px' | '500px';
 }
 
 export function AuthLayout({ children, maxWidth = '420px' }: AuthLayoutProps) {

@@ -55,7 +55,7 @@ export function SetCard({ set, setNumber, onClick }: SetCardProps) {
   const separatorStyle: React.CSSProperties = {
     fontSize: typography.fontSize.xs,
     color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
-    fontWeight: typography.fontWeight.normal,
+    fontWeight: typography.fontWeight.regular,
   };
 
   const repsStyle: React.CSSProperties = {

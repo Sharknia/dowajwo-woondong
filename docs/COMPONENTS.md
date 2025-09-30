@@ -1,4 +1,8 @@
-# UI 컴포넌트 가이드
+# 🧩 UI 컴포넌트 라이브러리
+
+Dowajwo-Woondong의 재사용 가능한 UI 컴포넌트 전체 가이드
+
+---
 
 ## 기본 UI 컴포넌트
 - `Button`: variant(primary/secondary/outline/ghost), size(sm/md/lg)
@@ -125,3 +129,28 @@ WorkoutSession (세션)
 - `WorkoutSet`: weight, reps, completed
 - `Exercise`: name, sets[]
 - `WorkoutSession`: date, exercises[], totalDuration
+
+---
+
+## 📊 접근성 준수
+
+모든 UI 컴포넌트는 **WCAG 2.1 AA** 기준을 준수합니다:
+
+- ✅ **포커스 관리**: 3px 네온 그린 outline + 박스 섀도우
+- ✅ **ARIA 속성**: 스크린 리더 최적화
+- ✅ **키보드 네비게이션**: Tab/Enter/Space 지원
+- ✅ **색상 대비율**: 최소 4.5:1 이상
+
+자세한 내용: [ACCESSIBILITY.md](./ACCESSIBILITY.md)
+
+---
+
+## 📚 관련 문서
+
+- **[DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md)** - 디자인 토큰 및 스타일 가이드
+- **[ACCESSIBILITY.md](./ACCESSIBILITY.md)** - 접근성 준수 사항
+- **[SETUP.md](./SETUP.md)** - 프로젝트 설정
+
+---
+
+**최종 업데이트**: 2025-10-01

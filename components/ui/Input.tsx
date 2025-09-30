@@ -2,7 +2,7 @@
 
 import React, { forwardRef } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
-import { colors, typography, spacing, borderRadius } from '@/lib/design-system';
+import { colors, typography, spacing, borderRadius, focus } from '@/lib/design-system';
 
 export type InputSize = 'sm' | 'md' | 'lg';
 
@@ -81,30 +81,26 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       fontFamily: typography.fontFamily.sans,
       background: isDark ? colors.dark.surfaceSecondary : colors.light.surfaceSecondary,
       color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-      border: `1px solid ${
-        error
-          ? colors.utility.error
-          : success
-          ? colors.utility.success
-          : isFocused
-          ? colors.primary.neonGreen
-          : isDark
-          ? 'rgba(255, 255, 255, 0.1)'
-          : 'rgba(0, 0, 0, 0.1)'
-      }`,
+      border: error
+        ? `2px solid ${colors.utility.error}`
+        : success
+        ? `2px solid ${colors.utility.success}`
+        : isFocused
+        ? (isDark ? focus.input.dark.border : focus.input.light.border)
+        : `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
       borderRadius: borderRadius.lg,
       outline: 'none',
-      transition: 'all 0.3s ease',
+      transition: `all 0.3s ease, ${focus.transition}`,
       paddingLeft: leftIcon ? spacing[10] : sizeStyles[size].padding.split(' ')[1],
       paddingRight: rightIcon ? spacing[10] : sizeStyles[size].padding.split(' ')[1],
       opacity: disabled ? 0.6 : 1,
       cursor: disabled ? 'not-allowed' : 'text',
       boxShadow: error
-        ? `0 0 0 3px ${isDark ? 'rgba(255, 59, 48, 0.2)' : 'rgba(255, 59, 48, 0.1)'}`
+        ? (isDark ? focus.danger.dark.boxShadow : focus.danger.light.boxShadow)
         : success
-        ? `0 0 0 3px ${isDark ? 'rgba(52, 199, 89, 0.2)' : 'rgba(52, 199, 89, 0.1)'}`
+        ? (isDark ? focus.success.dark.boxShadow : focus.success.light.boxShadow)
         : isFocused
-        ? `0 0 0 3px ${isDark ? 'rgba(50, 215, 75, 0.2)' : 'rgba(50, 215, 75, 0.1)'}`
+        ? (isDark ? focus.input.dark.boxShadow : focus.input.light.boxShadow)
         : 'none',
     };
 
@@ -158,7 +154,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           </label>
         )}
         <div style={inputWrapperStyle}>
-          {leftIcon && <div style={leftIconStyle}>{leftIcon}</div>}
+          {leftIcon && <div style={leftIconStyle} aria-hidden="true">{leftIcon}</div>}
           <input
             ref={ref}
             id={inputId}
@@ -166,20 +162,36 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             disabled={disabled}
+            aria-invalid={!!error}
+            aria-describedby={
+              error ? `${inputId}-error` :
+              success ? `${inputId}-success` :
+              hint ? `${inputId}-hint` :
+              undefined
+            }
             {...props}
           />
           {rightIcon && (
             <div
               style={rightIconStyle}
               onClick={onRightIconClick}
+              role={onRightIconClick ? 'button' : undefined}
+              tabIndex={onRightIconClick ? 0 : undefined}
+              aria-label={onRightIconClick ? '입력 필드 추가 동작' : undefined}
+              onKeyDown={(e) => {
+                if (onRightIconClick && (e.key === 'Enter' || e.key === ' ')) {
+                  e.preventDefault();
+                  onRightIconClick();
+                }
+              }}
             >
               {rightIcon}
             </div>
           )}
         </div>
-        {error && <span style={errorStyle}>{error}</span>}
-        {success && !error && <span style={successStyle}>{success}</span>}
-        {hint && !error && !success && <span style={hintStyle}>{hint}</span>}
+        {error && <span id={`${inputId}-error`} style={errorStyle} role="alert">{error}</span>}
+        {success && !error && <span id={`${inputId}-success`} style={successStyle} role="status">{success}</span>}
+        {hint && !error && !success && <span id={`${inputId}-hint`} style={hintStyle}>{hint}</span>}
         <style jsx global>{`
           input:-webkit-autofill,
           input:-webkit-autofill:hover,

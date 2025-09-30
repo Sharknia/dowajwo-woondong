@@ -2,9 +2,9 @@
 
 import React, { forwardRef } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
-import { colors, typography, spacing } from '@/lib/design-system';
+import { colors, typography, spacing, focus } from '@/lib/design-system';
 
-interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'style'> {
+interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'style' | 'size'> {
   label?: string;
   error?: string;
   size?: 'sm' | 'md' | 'lg';
@@ -14,6 +14,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   ({ label, error, size = 'md', id, disabled, ...props }, ref) => {
     const { theme } = useTheme();
     const isDark = theme === 'dark';
+    const [isFocused, setIsFocused] = React.useState(false);
 
     const checkboxId = id || `checkbox-${Math.random().toString(36).substr(2, 9)}`;
 
@@ -36,6 +37,11 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       height: sizeMap[size],
       accentColor: colors.primary.neonGreen,
       cursor: disabled ? 'not-allowed' : 'pointer',
+      outline: isFocused && !disabled
+        ? (isDark ? focus.dark.outline : focus.light.outline)
+        : 'none',
+      outlineOffset: isFocused && !disabled ? '2px' : '0',
+      transition: focus.transition,
     };
 
     const labelStyle = {
@@ -62,6 +68,10 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             id={checkboxId}
             style={checkboxStyle}
             disabled={disabled}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            aria-invalid={!!error}
+            aria-describedby={error ? `${checkboxId}-error` : undefined}
             {...props}
           />
           {label && (
@@ -70,7 +80,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             </label>
           )}
         </div>
-        {error && <span style={errorStyle}>{error}</span>}
+        {error && <span id={`${checkboxId}-error`} style={errorStyle} role="alert">{error}</span>}
       </div>
     );
   }
