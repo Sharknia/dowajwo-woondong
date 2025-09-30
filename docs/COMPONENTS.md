@@ -1,156 +1,91 @@
-# 🧩 UI 컴포넌트 라이브러리
+# UI 컴포넌트
 
-Dowajwo-Woondong의 재사용 가능한 UI 컴포넌트 전체 가이드
+## 기본 UI
 
----
+| 컴포넌트 | Props | 설명 |
+|---------|-------|------|
+| **Button** | variant(primary/secondary/outline/ghost), size(sm/md/lg), isLoading, fullWidth | ARIA: aria-busy, aria-disabled |
+| **Input** | label, error, success, hint, leftIcon, rightIcon, onRightIconClick | ARIA: aria-invalid, aria-describedby |
+| **Checkbox** | label, size(sm/md/lg), error | ARIA: aria-invalid |
+| **Card** | padding(sm/md/lg/xl), variant(default/elevated/outlined), onClick | 클릭 시 role="button" |
+| **Form/FormGroup/FormRow** | gap, children | 레이아웃 관리 |
+| **Divider** | text, orientation(horizontal/vertical) | 구분선 |
+| **Logo** | size, animated, title, subtitle | 브랜드 |
+| **AuthLayout** | maxWidth(420px 기본) | 인증 페이지 레이아웃 |
+| **NavigationBar** | items, activeItem, onItemClick | 하단 고정, SVG 아이콘 |
 
-## 기본 UI 컴포넌트
-- `Button`: variant(primary/secondary/outline/ghost), size(sm/md/lg)
-- `Input`: label, error, success, hint, leftIcon, rightIcon
-- `Checkbox`: label, size(sm/md/lg)
-- `Card`: padding(sm/md/lg/xl), variant(default/elevated/outlined)
-- `Form/FormGroup/FormRow`: gap 설정, 레이아웃 관리
-- `Divider`: text, orientation(horizontal/vertical)
-- `Logo`: size, animated, title, subtitle
-- `AuthLayout`: 인증 페이지 레이아웃, maxWidth=420px 기본
-- `NavigationBar`: 하단 고정 네비게이션, SVG 아이콘, 활성 상태 표시
+## 운동 컴포넌트
 
-## 운동 관련 컴포넌트
-- `SetCard`: 세트 정보 (80kg × 12회), 알약형 디자인
-- `ExerciseCard`: 운동 종목 + 세트 리스트, 구분선 레이아웃
-- `WorkoutSessionCard`: 날짜별 운동 묶음, 통계 포함
-- `WorkoutStartCard`: 운동 시작 버튼 카드
+| 컴포넌트 | 용도 | 특징 |
+|---------|------|------|
+| **SetCard** | 세트 정보 (80kg × 12회) | 알약형, 네온 테두리 |
+| **ExerciseCard** | 운동 종목 + 세트 리스트 | 구분선, flexWrap |
+| **WorkoutSessionCard** | 날짜별 운동 묶음 | 통계 포함 |
+| **WorkoutStartCard** | 운동 시작 CTA | elevated Card |
 
-## 핵심 사용법
+## 사용 예제
 
 ```typescript
-// 필수: ThemeProvider로 감싸기
+import { ThemeProvider } from '@/contexts/ThemeContext';
+import { Button, Input, Checkbox, Card } from '@/components/ui';
+
 <ThemeProvider>
-  <AuthLayout>
-    <Logo subtitle="환영합니다" />
-    <Form onSubmit={handleSubmit}>
-      <Input label="이메일" type="email" error={errors.email} />
-      <Input label="비밀번호" type="password" rightIcon={<EyeIcon />} />
-      <Checkbox label="자동 로그인" />
-      <Button type="submit" variant="primary" fullWidth>로그인</Button>
-    </Form>
-  </AuthLayout>
+  <Card padding="lg" variant="elevated">
+    <Input
+      label="이메일"
+      type="email"
+      error={errors.email}
+      leftIcon={<Icon />}
+    />
+    <Input
+      label="비밀번호"
+      type="password"
+      rightIcon={<EyeIcon />}
+      onRightIconClick={togglePasswordVisibility}
+    />
+    <Checkbox label="자동 로그인" />
+    <Button variant="primary" fullWidth isLoading={loading}>
+      로그인
+    </Button>
+  </Card>
 </ThemeProvider>
 ```
 
-## 디자인 시스템
-- **색상**: 네온그린(#32D74B), 다크/라이트 모드 자동 대응
-- **간격**: spacing[0-12] (0px-48px)
-- **타이포**: xs(12px)-3xl(30px)
-- **그림자**: shadows.dark/light (sm/md/lg/xl)
-
-## 주요 Props
-
-### Button
-- `variant`: primary(네온그린)/secondary/outline/ghost
-- `isLoading`: 로딩 상태 표시
-- `fullWidth`: 100% 너비
-
-### Input
-- `error/success/hint`: 상태 메시지
-- `rightIcon/onRightIconClick`: 아이콘 액션
-
-### AuthLayout
-- 모든 인증 페이지 420px 통일
-- 중앙 정렬, Card 포함
-
-### NavigationBar
-- `items`: NavigationItem[] (id, label, icon, href)
-- `activeItem`: 활성 아이템 id
-- `onItemClick`: 클릭 핸들러
-- SVG 아이콘: home, dumbbell, chart, user
-
-## 운동 컴포넌트 상세
-
-### SetCard
-**경로**: `components/workout/SetCard.tsx`
-**용도**: 개별 세트 정보 표시
-```typescript
-<SetCard set={{weight: 80, reps: 12}} setNumber={1} />
-```
-- 알약형 디자인 (borderRadius.full)
-- 네온 그린 테두리 + 반투명 배경
-- `80kg × 12회` 형태로 표시
-
-### ExerciseCard
-**경로**: `components/workout/ExerciseCard.tsx`
-**용도**: 운동 종목 + 세트 리스트
-```typescript
-<ExerciseCard
-  exercise={{
-    id: 'ex1',
-    name: '벤치 프레스',
-    sets: [...]
-  }}
-/>
-```
-- 카드 배경 없음 (구분선만 사용)
-- 세트들을 가로 나열 (flexWrap)
-- 공간 효율적 디자인
-
-### WorkoutSessionCard
-**경로**: `components/workout/WorkoutSessionCard.tsx`
-**용도**: 날짜별 운동 묶음
-```typescript
-<WorkoutSessionCard
-  session={{
-    id: '1',
-    date: '2024-09-15',
-    totalDuration: 45,
-    exercises: [...]
-  }}
-/>
-```
-- 헤더: 날짜 + 통계 (운동 개수, 세트 수, 시간)
-- 여러 ExerciseCard 포함
-- 하나의 Card로 전체 감싸기
-
-### WorkoutStartCard
-**경로**: `components/workout/WorkoutStartCard.tsx`
-**용도**: 운동 시작 버튼 카드
-```typescript
-<WorkoutStartCard onStartWorkout={handleStart} />
-```
-- 아이콘, 제목, 설명, 버튼 포함
-- Card variant="elevated"
-
 ## 운동 데이터 구조
-**경로**: `types/workout.ts`
+
 ```typescript
-WorkoutSession (세션)
-  └─ Exercise (운동 종목)
-      └─ WorkoutSet (세트)
+WorkoutSession
+  └─ Exercise
+      └─ WorkoutSet
+
+// types/workout.ts
+interface WorkoutSet {
+  weight: number;
+  reps: number;
+  completed: boolean;
+}
+
+interface Exercise {
+  id: string;
+  name: string;
+  sets: WorkoutSet[];
+}
+
+interface WorkoutSession {
+  id: string;
+  date: string;
+  totalDuration: number;
+  exercises: Exercise[];
+}
 ```
-- `WorkoutSet`: weight, reps, completed
-- `Exercise`: name, sets[]
-- `WorkoutSession`: date, exercises[], totalDuration
 
----
+## 접근성 (WCAG 2.1 AA)
 
-## 📊 접근성 준수
+- ✅ 포커스: 3px outline + 박스 섀도우
+- ✅ ARIA: 모든 인터랙티브 요소
+- ✅ 키보드: Tab/Enter/Space
+- ✅ 대비율: 4.5:1+
 
-모든 UI 컴포넌트는 **WCAG 2.1 AA** 기준을 준수합니다:
-
-- ✅ **포커스 관리**: 3px 네온 그린 outline + 박스 섀도우
-- ✅ **ARIA 속성**: 스크린 리더 최적화
-- ✅ **키보드 네비게이션**: Tab/Enter/Space 지원
-- ✅ **색상 대비율**: 최소 4.5:1 이상
-
-자세한 내용: [ACCESSIBILITY.md](./ACCESSIBILITY.md)
-
----
-
-## 📚 관련 문서
-
-- **[DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md)** - 디자인 토큰 및 스타일 가이드
-- **[ACCESSIBILITY.md](./ACCESSIBILITY.md)** - 접근성 준수 사항
-- **[SETUP.md](./SETUP.md)** - 프로젝트 설정
-
----
+상세: ACCESSIBILITY.md
 
 **최종 업데이트**: 2025-10-01
