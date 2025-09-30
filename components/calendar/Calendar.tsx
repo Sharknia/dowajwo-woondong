@@ -123,6 +123,7 @@ export function Calendar({ selectedDate, workoutDates, onDateSelect }: CalendarP
     if (!touchStart || isAnimating) return;
     const currentTouch = e.targetTouches[0].clientX;
     const diff = currentTouch - touchStart;
+
     setTouchEnd(currentTouch);
     setDragOffset(diff);
   };
@@ -151,6 +152,9 @@ export function Calendar({ selectedDate, workoutDates, onDateSelect }: CalendarP
   // 스타일
   const containerStyle: React.CSSProperties = {
     width: '100%',
+    overflow: 'hidden', // 슬라이드 시 넘치는 부분 숨김
+    position: 'relative',
+    touchAction: 'pan-y', // 세로 스크롤만 허용, 가로는 차단
   };
 
   const headerStyle: React.CSSProperties = {
@@ -206,6 +210,9 @@ export function Calendar({ selectedDate, workoutDates, onDateSelect }: CalendarP
       : slideDirection
         ? 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
         : 'none',
+    willChange: slideDirection || isDragging ? 'transform' : 'auto', // 성능 최적화
+    backfaceVisibility: 'hidden', // 애니메이션 깜빡임 방지
+    WebkitBackfaceVisibility: 'hidden',
   };
 
   const getInitialTransform = () => {

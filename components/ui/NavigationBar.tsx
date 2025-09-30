@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { useTheme } from '@/contexts/ThemeContext';
 import { colors, spacing, typography, shadows } from '@/lib/design-system';
 
@@ -144,9 +145,13 @@ export function NavigationBar({
       {items.map((item) => {
         const isActive = item.id === activeItem;
         return (
-          <div
+          <Link
             key={item.id}
-            style={itemStyle(isActive)}
+            href={item.href}
+            style={{
+              ...itemStyle(isActive),
+              textDecoration: 'none',
+            }}
             onClick={() => handleItemClick(item)}
             role="button"
             tabIndex={0}
@@ -158,7 +163,7 @@ export function NavigationBar({
           >
             {renderIcon(item.icon, isActive)}
             <span style={labelStyle(isActive)}>{item.label}</span>
-          </div>
+          </Link>
         );
       })}
     </nav>
