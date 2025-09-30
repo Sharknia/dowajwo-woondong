@@ -20,10 +20,24 @@ export function Calendar({ selectedDate, workoutDates, onDateSelect }: CalendarP
 
   // 현재 보고 있는 월
   const [currentMonth, setCurrentMonth] = React.useState(new Date());
+  const [displayMonth, setDisplayMonth] = React.useState(new Date());
 
-  // 월의 첫째 날과 마지막 날
-  const firstDayOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
-  const lastDayOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
+  // 스와이프 상태
+  const [touchStart, setTouchStart] = React.useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = React.useState<number | null>(null);
+  const [isDragging, setIsDragging] = React.useState(false);
+  const [dragOffset, setDragOffset] = React.useState(0);
+
+  // 애니메이션 상태
+  const [isAnimating, setIsAnimating] = React.useState(false);
+  const [slideDirection, setSlideDirection] = React.useState<'next' | 'prev' | null>(null);
+
+  // 최소 스와이프 거리 (픽셀)
+  const minSwipeDistance = 50;
+
+  // 월의 첫째 날과 마지막 날 (displayMonth 사용)
+  const firstDayOfMonth = new Date(displayMonth.getFullYear(), displayMonth.getMonth(), 1);
+  const lastDayOfMonth = new Date(displayMonth.getFullYear(), displayMonth.getMonth() + 1, 0);
 
   // 캘린더에 표시할 날짜들 계산
   const startDate = new Date(firstDayOfMonth);
@@ -64,11 +78,74 @@ export function Calendar({ selectedDate, workoutDates, onDateSelect }: CalendarP
 
   // 이전/다음 달로 이동
   const goToPreviousMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
+    if (isAnimating) return;
+    const newMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1);
+    setCurrentMonth(newMonth);
+    setSlideDirection('prev');
+    setIsAnimating(true);
+
+    // 애니메이션 시작 직전에 새로운 달로 변경
+    requestAnimationFrame(() => {
+      setDisplayMonth(newMonth);
+      setTimeout(() => {
+        setIsAnimating(false);
+        setSlideDirection(null);
+      }, 300);
+    });
   };
 
   const goToNextMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
+    if (isAnimating) return;
+    const newMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1);
+    setCurrentMonth(newMonth);
+    setSlideDirection('next');
+    setIsAnimating(true);
+
+    // 애니메이션 시작 직전에 새로운 달로 변경
+    requestAnimationFrame(() => {
+      setDisplayMonth(newMonth);
+      setTimeout(() => {
+        setIsAnimating(false);
+        setSlideDirection(null);
+      }, 300);
+    });
+  };
+
+  // 스와이프 핸들러
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (isAnimating) return;
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+    setIsDragging(true);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (!touchStart || isAnimating) return;
+    const currentTouch = e.targetTouches[0].clientX;
+    const diff = currentTouch - touchStart;
+    setTouchEnd(currentTouch);
+    setDragOffset(diff);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd || isAnimating) {
+      setIsDragging(false);
+      setDragOffset(0);
+      return;
+    }
+
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    setIsDragging(false);
+    setDragOffset(0);
+
+    if (isLeftSwipe) {
+      goToNextMonth();
+    } else if (isRightSwipe) {
+      goToPreviousMonth();
+    }
   };
 
   // 스타일
@@ -113,6 +190,28 @@ export function Calendar({ selectedDate, workoutDates, onDateSelect }: CalendarP
     fontWeight: typography.fontWeight.semibold,
     color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
     padding: spacing[2],
+  };
+
+  const calendarContentStyle: React.CSSProperties = {
+    transform: isDragging
+      ? `translateX(${dragOffset}px)`
+      : slideDirection === 'next'
+        ? 'translateX(0)'  // 다음 달: 오른쪽에서(100%) 중앙으로(0) 이동
+        : slideDirection === 'prev'
+          ? 'translateX(0)'  // 이전 달: 왼쪽에서(-100%) 중앙으로(0) 이동
+          : 'translateX(0)',
+    opacity: 1,
+    transition: isDragging
+      ? 'none'
+      : slideDirection
+        ? 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+        : 'none',
+  };
+
+  const getInitialTransform = () => {
+    if (!slideDirection) return 'translateX(0)';
+    // next: 오른쪽에서 시작, prev: 왼쪽에서 시작
+    return slideDirection === 'next' ? 'translateX(100%)' : 'translateX(-100%)';
   };
 
   const daysGridStyle: React.CSSProperties = {
@@ -177,7 +276,12 @@ export function Calendar({ selectedDate, workoutDates, onDateSelect }: CalendarP
   const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
 
   return (
-    <div style={containerStyle}>
+    <div
+      style={containerStyle}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+    >
       <div style={headerStyle}>
         <button
           style={navButtonStyle}
@@ -198,26 +302,34 @@ export function Calendar({ selectedDate, workoutDates, onDateSelect }: CalendarP
         </button>
       </div>
 
-      <div style={weekdaysStyle}>
-        {weekdays.map((day) => (
-          <div key={day} style={weekdayStyle}>
-            {day}
-          </div>
-        ))}
-      </div>
+      <div
+        style={{
+          ...calendarContentStyle,
+          ...(slideDirection && { transform: getInitialTransform() })
+        }}
+        key={displayMonth.toISOString()}
+      >
+        <div style={weekdaysStyle}>
+          {weekdays.map((day) => (
+            <div key={day} style={weekdayStyle}>
+              {day}
+            </div>
+          ))}
+        </div>
 
-      <div style={daysGridStyle}>
-        {calendarDays.map((date, index) => (
-          <button
-            key={index}
-            style={getDayStyle(date)}
-            onClick={() => onDateSelect(date)}
-            aria-label={`${date.getMonth() + 1}월 ${date.getDate()}일${isWorkoutDay(date) ? ' 운동한 날' : ''}`}
-            aria-pressed={isSelectedDay(date)}
-          >
-            {date.getDate()}
-          </button>
-        ))}
+        <div style={daysGridStyle}>
+          {calendarDays.map((date, index) => (
+            <button
+              key={index}
+              style={getDayStyle(date)}
+              onClick={() => onDateSelect(date)}
+              aria-label={`${date.getMonth() + 1}월 ${date.getDate()}일${isWorkoutDay(date) ? ' 운동한 날' : ''}`}
+              aria-pressed={isSelectedDay(date)}
+            >
+              {date.getDate()}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

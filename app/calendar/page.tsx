@@ -164,10 +164,6 @@ function CalendarPageContent() {
   return (
     <div style={containerStyle}>
       <div style={contentStyle}>
-        <div>
-          <h1 style={titleStyle}>운동 캘린더</h1>
-        </div>
-
         <Calendar
           selectedDate={selectedDate}
           workoutDates={workoutDates}
@@ -175,10 +171,6 @@ function CalendarPageContent() {
         />
 
         <div>
-          <div style={selectedDateStyle}>
-            {formatSelectedDate(selectedDate)}
-          </div>
-
           {hasWorkout && selectedWorkout ? (
             <WorkoutSessionCard
               session={selectedWorkout}
