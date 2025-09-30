@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { colors, spacing, typography, borderRadius } from '@/lib/design-system';
 import type { WorkoutSet } from '@/types/workout';
@@ -18,30 +18,62 @@ interface SetCardProps {
 export function SetCard({ set, setNumber, onClick }: SetCardProps) {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const [isHovered, setIsHovered] = useState(false);
 
   const containerStyle: React.CSSProperties = {
-    display: 'inline-flex',
+    display: 'flex',
     alignItems: 'center',
-    gap: spacing[2],
-    padding: `${spacing[1]} ${spacing[3]}`,
-    background: isDark ? 'rgba(50, 215, 75, 0.08)' : 'rgba(50, 215, 75, 0.06)',
-    border: `1px solid ${isDark ? 'rgba(50, 215, 75, 0.15)' : 'rgba(50, 215, 75, 0.12)'}`,
-    borderRadius: borderRadius.full,
+    justifyContent: 'center',
+    gap: spacing[1],
+    padding: `${spacing[1]} ${spacing[2]}`,
+    backgroundColor: isHovered && onClick
+      ? isDark
+        ? 'rgba(28, 28, 30, 0.8)'
+        : 'rgba(242, 242, 247, 0.8)'
+      : isDark
+        ? 'rgba(28, 28, 30, 0.6)'
+        : 'rgba(242, 242, 247, 0.6)',
+    borderRadius: borderRadius.md,
+    border: `1px solid ${
+      isHovered && onClick
+        ? colors.primary.neonGreen
+        : isDark
+          ? 'rgba(58, 58, 60, 0.3)'
+          : 'rgba(209, 209, 214, 0.3)'
+    }`,
     cursor: onClick ? 'pointer' : 'default',
     transition: 'all 0.2s ease',
+    width: '100%',
   };
 
-  const textStyle: React.CSSProperties = {
+  const weightStyle: React.CSSProperties = {
     fontSize: typography.fontSize.sm,
-    fontWeight: typography.fontWeight.medium,
+    fontWeight: typography.fontWeight.bold,
     color: colors.primary.neonGreen,
   };
 
+  const separatorStyle: React.CSSProperties = {
+    fontSize: typography.fontSize.xs,
+    color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
+    fontWeight: typography.fontWeight.normal,
+  };
+
+  const repsStyle: React.CSSProperties = {
+    fontSize: typography.fontSize.sm,
+    fontWeight: typography.fontWeight.medium,
+    color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
+  };
+
   return (
-    <div style={containerStyle} onClick={onClick}>
-      <span style={textStyle}>
-        {set.weight}kg × {set.reps}회
-      </span>
+    <div
+      style={containerStyle}
+      onClick={onClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <span style={weightStyle}>{set.weight}kg</span>
+      <span style={separatorStyle}>×</span>
+      <span style={repsStyle}>{set.reps}</span>
     </div>
   );
 }

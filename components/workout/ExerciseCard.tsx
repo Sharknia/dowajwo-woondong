@@ -36,9 +36,10 @@ export function ExerciseCard({ exercise, onClick }: ExerciseCardProps) {
   };
 
   const setsContainerStyle: React.CSSProperties = {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, 1fr)',
     gap: spacing[2],
+    alignItems: 'center',
   };
 
   return (

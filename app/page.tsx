@@ -60,6 +60,31 @@ const sampleWorkouts: WorkoutSession[] = [
       },
     ],
   },
+  {
+    id: '3',
+    date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(), // 5일 전
+    totalDuration: 60,
+    exercises: [
+      {
+        id: 'ex5',
+        name: '데드리프트',
+        sets: [
+          { id: 'set12', weight: 120, reps: 10, completed: true },
+          { id: 'set13', weight: 120, reps: 10, completed: true },
+          { id: 'set14', weight: 120, reps: 8, completed: true },
+          { id: 'set15', weight: 120, reps: 8, completed: true },
+          { id: 'set16', weight: 120, reps: 8, completed: true },
+          { id: 'set17', weight: 120, reps: 6, completed: true },
+          { id: 'set18', weight: 120, reps: 6, completed: true },
+          { id: 'set19', weight: 100, reps: 10, completed: true },
+          { id: 'set20', weight: 100, reps: 10, completed: true },
+          { id: 'set21', weight: 100, reps: 8, completed: true },
+          { id: 'set22', weight: 80, reps: 12, completed: true },
+          { id: 'set23', weight: 80, reps: 12, completed: true },
+        ],
+      },
+    ],
+  },
 ];
 
 function HomeContent() {
