@@ -19,8 +19,8 @@ interface NavigationBarProps {
 
 const defaultItems: NavigationItem[] = [
   { id: 'home', label: '홈', icon: 'home', href: '/' },
+  { id: 'calendar', label: '캘린더', icon: 'calendar', href: '/calendar' },
   { id: 'workout', label: '운동', icon: 'dumbbell', href: '/workout' },
-  { id: 'stats', label: '통계', icon: 'chart', href: '/stats' },
   { id: 'profile', label: '프로필', icon: 'user', href: '/profile' },
 ];
 
@@ -103,12 +103,13 @@ export function NavigationBar({
             <path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z" />
           </svg>
         );
-      case 'chart':
+      case 'calendar':
         return (
           <svg style={iconStyle} viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="18" y1="20" x2="18" y2="10" />
-            <line x1="12" y1="20" x2="12" y2="4" />
-            <line x1="6" y1="20" x2="6" y2="14" />
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
           </svg>
         );
       case 'user':
