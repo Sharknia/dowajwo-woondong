@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { WorkoutProvider, useWorkout } from '@/contexts/WorkoutContext';
 import { Calendar } from '@/components/calendar/Calendar';
 import { WorkoutSessionCard } from '@/components/workout/WorkoutSessionCard';
 import { NavigationBar } from '@/components/ui/NavigationBar';
@@ -75,6 +76,12 @@ function CalendarPageContent() {
   const isDark = theme === 'dark';
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [activeNavItem, setActiveNavItem] = useState('calendar');
+  const {
+    handleSessionClick,
+    handleEditWorkout,
+    handleDeleteWorkout,
+    handleAddWorkout
+  } = useWorkout();
 
   // 운동한 날짜들 추출
   const workoutDates = sampleWorkouts.map(workout => new Date(workout.date));
@@ -141,16 +148,6 @@ function CalendarPageContent() {
     setSelectedDate(date);
   };
 
-  const handleAddWorkout = () => {
-    console.log('운동 추가하기:', selectedDate);
-    // TODO: 운동 추가 페이지로 이동
-  };
-
-  const handleEditWorkout = (sessionId: string) => {
-    console.log('운동 편집:', sessionId);
-    // TODO: 운동 편집 페이지로 이동
-  };
-
   const handleNavClick = (itemId: string) => {
     console.log('네비게이션 아이템 클릭:', itemId);
     setActiveNavItem(itemId);
@@ -179,8 +176,9 @@ function CalendarPageContent() {
           {hasWorkout && selectedWorkout ? (
             <WorkoutSessionCard
               session={selectedWorkout}
-              onClick={() => console.log('운동 상세 보기')}
-              onEdit={() => handleEditWorkout(selectedWorkout.id)}
+              onClick={() => handleSessionClick(selectedWorkout.id)}
+              onEdit={handleEditWorkout}
+              onDelete={handleDeleteWorkout}
             />
           ) : (
             <div style={emptyStateStyle}>
@@ -191,7 +189,7 @@ function CalendarPageContent() {
                 variant="primary"
                 size="lg"
                 fullWidth
-                onClick={handleAddWorkout}
+                onClick={() => handleAddWorkout(selectedDate)}
               >
                 운동 추가하기
               </Button>
@@ -211,7 +209,9 @@ function CalendarPageContent() {
 export default function CalendarPage() {
   return (
     <ThemeProvider>
-      <CalendarPageContent />
+      <WorkoutProvider>
+        <CalendarPageContent />
+      </WorkoutProvider>
     </ThemeProvider>
   );
 }

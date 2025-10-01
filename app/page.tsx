@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { WorkoutProvider, useWorkout } from '@/contexts/WorkoutContext';
 import { WorkoutStartCard } from '@/components/workout/WorkoutStartCard';
 import { WorkoutSessionCard } from '@/components/workout/WorkoutSessionCard';
 import { NavigationBar } from '@/components/ui/NavigationBar';
@@ -91,6 +92,12 @@ function HomeContent() {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const [activeNavItem, setActiveNavItem] = useState('home');
+  const {
+    handleSessionClick,
+    handleEditWorkout,
+    handleDeleteWorkout,
+    handleStartWorkout
+  } = useWorkout();
 
   const containerStyle: React.CSSProperties = {
     minHeight: '100vh',
@@ -110,21 +117,6 @@ function HomeContent() {
     display: 'flex',
     flexDirection: 'column',
     gap: spacing[6],
-  };
-
-  const handleStartWorkout = () => {
-    console.log('운동 시작하기 클릭');
-    // TODO: 운동 시작 페이지로 이동
-  };
-
-  const handleSessionClick = () => {
-    console.log('운동 세션 클릭');
-    // TODO: 운동 상세 페이지로 이동
-  };
-
-  const handleEditWorkout = (sessionId: string) => {
-    console.log('운동 편집:', sessionId);
-    // TODO: 운동 편집 페이지로 이동
   };
 
   const handleNavClick = (itemId: string) => {
@@ -151,8 +143,9 @@ function HomeContent() {
             <div key={session.id} style={{ marginBottom: spacing[4] }}>
               <WorkoutSessionCard
                 session={session}
-                onClick={handleSessionClick}
-                onEdit={() => handleEditWorkout(session.id)}
+                onClick={() => handleSessionClick(session.id)}
+                onEdit={handleEditWorkout}
+                onDelete={handleDeleteWorkout}
               />
             </div>
           ))}
@@ -169,7 +162,9 @@ function HomeContent() {
 export default function Home() {
   return (
     <ThemeProvider>
-      <HomeContent />
+      <WorkoutProvider>
+        <HomeContent />
+      </WorkoutProvider>
     </ThemeProvider>
   );
 }
