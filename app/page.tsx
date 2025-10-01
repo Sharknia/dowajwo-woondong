@@ -122,6 +122,11 @@ function HomeContent() {
     // TODO: 운동 상세 페이지로 이동
   };
 
+  const handleEditWorkout = (sessionId: string) => {
+    console.log('운동 편집:', sessionId);
+    // TODO: 운동 편집 페이지로 이동
+  };
+
   const handleNavClick = (itemId: string) => {
     console.log('네비게이션 아이템 클릭:', itemId);
     setActiveNavItem(itemId);
@@ -147,6 +152,7 @@ function HomeContent() {
               <WorkoutSessionCard
                 session={session}
                 onClick={handleSessionClick}
+                onEdit={() => handleEditWorkout(session.id)}
               />
             </div>
           ))}
