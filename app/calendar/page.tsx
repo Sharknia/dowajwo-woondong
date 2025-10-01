@@ -146,6 +146,11 @@ function CalendarPageContent() {
     // TODO: 운동 추가 페이지로 이동
   };
 
+  const handleEditWorkout = (sessionId: string) => {
+    console.log('운동 편집:', sessionId);
+    // TODO: 운동 편집 페이지로 이동
+  };
+
   const handleNavClick = (itemId: string) => {
     console.log('네비게이션 아이템 클릭:', itemId);
     setActiveNavItem(itemId);
@@ -175,6 +180,7 @@ function CalendarPageContent() {
             <WorkoutSessionCard
               session={selectedWorkout}
               onClick={() => console.log('운동 상세 보기')}
+              onEdit={() => handleEditWorkout(selectedWorkout.id)}
             />
           ) : (
             <div style={emptyStateStyle}>
