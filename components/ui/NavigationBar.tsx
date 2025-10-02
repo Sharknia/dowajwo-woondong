@@ -21,7 +21,7 @@ interface NavigationBarProps {
 const defaultItems: NavigationItem[] = [
   { id: 'home', label: '홈', icon: 'home', href: '/' },
   { id: 'calendar', label: '캘린더', icon: 'calendar', href: '/calendar' },
-  { id: 'workout', label: '운동', icon: 'dumbbell', href: '/workout' },
+  { id: 'workout', label: '운동', icon: 'dumbbell', href: '/workout/library' },
   { id: 'profile', label: '프로필', icon: 'user', href: '/profile' },
 ];
 
