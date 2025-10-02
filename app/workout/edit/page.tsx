@@ -3,6 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
 import { ExerciseInput, ExerciseFormData } from '@/components/workout/ExerciseInput';
 import { SetFormData } from '@/components/workout/SetInput';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -87,53 +88,85 @@ function WorkoutEditorContent() {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    paddingBottom: '80px',
+    paddingBottom: '120px', // 하단 고정 버튼 공간
   };
 
-  const headerStyle: React.CSSProperties = {
+  const headerContainerStyle: React.CSSProperties = {
     position: 'sticky',
     top: 0,
     zIndex: 100,
     width: '100%',
     maxWidth: '420px',
-    background: isDark ? colors.dark.surface : colors.light.surface,
-    padding: spacing[4],
-    borderBottom: `1px solid ${isDark ? colors.dark.surfaceTertiary : colors.light.surfaceTertiary}`,
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    padding: `0 ${spacing[4]} ${spacing[4]} ${spacing[4]}`,
   };
 
   const dateStyle: React.CSSProperties = {
     fontSize: typography.fontSize.xl,
     fontWeight: typography.fontWeight.bold,
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-  };
-
-  const buttonGroupStyle: React.CSSProperties = {
-    display: 'flex',
-    gap: spacing[2],
+    textAlign: 'center',
   };
 
   const contentStyle: React.CSSProperties = {
     width: '100%',
     maxWidth: '420px',
-    padding: spacing[4],
+    padding: `0 ${spacing[4]}`,
     display: 'flex',
     flexDirection: 'column',
     gap: spacing[4],
+    flex: 1,
   };
 
-  const emptyStateStyle: React.CSSProperties = {
+  const bottomBarStyle: React.CSSProperties = {
+    position: 'fixed',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    background: isDark ? colors.dark.surface : colors.light.surface,
+    borderTop: `1px solid ${isDark ? colors.dark.surfaceTertiary : colors.light.surfaceTertiary}`,
+    padding: spacing[4],
+    display: 'flex',
+    justifyContent: 'center',
+    zIndex: 100,
+  };
+
+  const bottomBarContentStyle: React.CSSProperties = {
+    width: '100%',
+    maxWidth: '420px',
+    display: 'flex',
+    gap: spacing[2],
+  };
+
+  const emptyStateContainerStyle: React.CSSProperties = {
     textAlign: 'center',
-    padding: `${spacing[12]} ${spacing[4]}`,
-    color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
-    fontSize: typography.fontSize.base,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: spacing[4],
+  };
+
+  const emptyStateIconStyle: React.CSSProperties = {
+    fontSize: '48px',
+    marginBottom: spacing[2],
+  };
+
+  const emptyStateTitleStyle: React.CSSProperties = {
+    fontSize: typography.fontSize.lg,
+    fontWeight: typography.fontWeight.semibold,
+    color: isDark ? colors.text.dark.primary : colors.text.light.primary,
+    marginBottom: spacing[2],
+  };
+
+  const emptyStateDescStyle: React.CSSProperties = {
+    fontSize: typography.fontSize.sm,
+    color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
+    marginBottom: spacing[4],
   };
 
   const addExerciseButtonStyle: React.CSSProperties = {
     fontSize: typography.fontSize.base,
     fontWeight: typography.fontWeight.semibold,
+    marginTop: spacing[2],
   };
 
   const handleExerciseUpdate = (id: string, updates: Partial<ExerciseFormData>) => {
@@ -247,29 +280,24 @@ function WorkoutEditorContent() {
   return (
     <div style={containerStyle}>
       {/* 헤더 */}
-      <header style={headerStyle}>
-        <h1 style={dateStyle}>{formatDate(state.date)}</h1>
-        <div style={buttonGroupStyle}>
-          <Button variant="outline" onClick={handleCancel} disabled={state.isSaving}>
-            취소
-          </Button>
-          <Button
-            variant="primary"
-            onClick={handleSave}
-            isLoading={state.isSaving}
-            disabled={!state.isDirty || state.isSaving}
-          >
-            저장
-          </Button>
-        </div>
+      <header style={headerContainerStyle}>
+        <Card variant="default" padding="md">
+          <h1 style={dateStyle}>{formatDate(state.date)}</h1>
+        </Card>
       </header>
 
       {/* 운동 목록 */}
       <main style={contentStyle}>
         {state.exercises.length === 0 ? (
-          <div style={emptyStateStyle}>
-            <p>운동을 추가해주세요</p>
-          </div>
+          <Card variant="elevated" padding="xl">
+            <div style={emptyStateContainerStyle}>
+              <div style={emptyStateIconStyle}>💪</div>
+              <h2 style={emptyStateTitleStyle}>운동을 추가해보세요</h2>
+              <p style={emptyStateDescStyle}>
+                오늘의 운동 기록을 시작하세요
+              </p>
+            </div>
+          </Card>
         ) : (
           state.exercises.map(exercise => (
             <ExerciseInput
@@ -291,6 +319,29 @@ function WorkoutEditorContent() {
           + 운동 추가
         </Button>
       </main>
+
+      {/* 하단 고정 버튼 */}
+      <div style={bottomBarStyle}>
+        <div style={bottomBarContentStyle}>
+          <Button
+            variant="outline"
+            onClick={handleCancel}
+            disabled={state.isSaving}
+            fullWidth
+          >
+            취소
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleSave}
+            isLoading={state.isSaving}
+            disabled={!state.isDirty || state.isSaving}
+            fullWidth
+          >
+            저장
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

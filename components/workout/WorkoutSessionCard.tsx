@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/Card';
 import { ExerciseCard } from './ExerciseCard';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -24,6 +24,23 @@ export function WorkoutSessionCard({ session, onClick, onEdit, onDelete, readOnl
   const isDark = theme === 'dark';
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isEditHovered, setIsEditHovered] = React.useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // 외부 클릭 감지
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    }
+
+    if (isMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [isMenuOpen]);
 
   const headerStyle: React.CSSProperties = {
     display: 'flex',
@@ -153,7 +170,7 @@ export function WorkoutSessionCard({ session, onClick, onEdit, onDelete, readOnl
             </span>
           </div>
           {!readOnly && (
-            <div style={menuButtonContainerStyle}>
+            <div style={menuButtonContainerStyle} ref={menuRef}>
               <button
                 style={editButtonStyle}
                 onClick={() => setIsMenuOpen(!isMenuOpen)}

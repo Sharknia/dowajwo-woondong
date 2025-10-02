@@ -1,8 +1,6 @@
 'use client';
 
 import React from 'react';
-import { Input } from '@/components/ui/Input';
-import { Checkbox } from '@/components/ui/Checkbox';
 import { Button } from '@/components/ui/Button';
 import { useTheme } from '@/contexts/ThemeContext';
 import { colors, spacing, typography } from '@/lib/design-system';
@@ -31,8 +29,8 @@ export function SetInput({ setNumber, set, onUpdate, onDelete }: SetInputProps) 
 
   const rowStyle: React.CSSProperties = {
     display: 'grid',
-    gridTemplateColumns: '32px 1fr 1fr 40px 40px',
-    gap: spacing[1],
+    gridTemplateColumns: '32px 1fr 1fr 48px 32px',
+    gap: spacing[2],
     alignItems: 'center',
     padding: spacing[2],
     borderRadius: '8px',
@@ -47,25 +45,69 @@ export function SetInput({ setNumber, set, onUpdate, onDelete }: SetInputProps) 
     textAlign: 'center',
   };
 
+  const inputGroupStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: spacing[1],
+  };
+
+  const inputStyle: React.CSSProperties & {
+    WebkitAppearance?: string;
+    MozAppearance?: string;
+  } = {
+    flex: 1,
+    background: isDark ? colors.dark.surfaceTertiary : colors.light.surfaceTertiary,
+    border: 'none',
+    borderRadius: '6px',
+    padding: `${spacing[2]} ${spacing[2]}`,
+    fontSize: typography.fontSize.sm,
+    fontWeight: typography.fontWeight.medium,
+    color: isDark ? colors.text.dark.primary : colors.text.light.primary,
+    textAlign: 'center',
+    outline: 'none',
+    width: '100%',
+    // 숫자 input 스피너 제거
+    MozAppearance: 'textfield',
+    WebkitAppearance: 'none',
+  };
+
   const unitStyle: React.CSSProperties = {
     fontSize: typography.fontSize.xs,
     fontWeight: typography.fontWeight.medium,
     color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
   };
 
-  const deleteButtonStyle: React.CSSProperties = {
-    padding: spacing[1],
-    minWidth: '36px',
-    minHeight: '36px',
+  const completeButtonStyle: React.CSSProperties = {
+    width: '48px',
+    height: '32px',
+    borderRadius: '16px',
+    border: set.completed
+      ? `2px solid ${colors.primary.neonGreen}`
+      : `2px solid ${isDark ? colors.dark.surfaceTertiary : colors.light.surfaceTertiary}`,
+    background: set.completed ? colors.primary.neonGreen : 'transparent',
+    color: set.completed ? colors.dark.background : (isDark ? colors.text.dark.tertiary : colors.text.light.tertiary),
+    fontSize: typography.fontSize.xs,
+    fontWeight: typography.fontWeight.bold,
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   };
 
-  const inputWrapperStyle: React.CSSProperties = {
-    position: 'relative',
+  const deleteButtonStyle: React.CSSProperties = {
+    width: '32px',
+    height: '32px',
+    borderRadius: '6px',
+    background: 'transparent',
+    border: 'none',
+    color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
+    cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: typography.fontSize.lg,
+    transition: 'all 0.2s ease',
   };
 
   return (
@@ -74,52 +116,81 @@ export function SetInput({ setNumber, set, onUpdate, onDelete }: SetInputProps) 
       <span style={setNumberStyle}>{setNumber}</span>
 
       {/* 무게 입력 */}
-      <div style={inputWrapperStyle}>
-        <Input
+      <div style={inputGroupStyle}>
+        <input
           type="number"
-          value={set.weight.toString()}
+          value={set.weight}
           onChange={(e) => onUpdate({ weight: Number(e.target.value) || 0 })}
-          rightIcon={<span style={unitStyle}>kg</span>}
           aria-label={`${setNumber}번 세트 무게`}
           min="0"
           step="0.5"
-          size="sm"
-          fullWidth={true}
+          style={inputStyle}
+          className="no-spinner"
         />
+        <span style={unitStyle}>kg</span>
       </div>
 
       {/* 횟수 입력 */}
-      <div style={inputWrapperStyle}>
-        <Input
+      <div style={inputGroupStyle}>
+        <input
           type="number"
-          value={set.reps.toString()}
+          value={set.reps}
           onChange={(e) => onUpdate({ reps: Number(e.target.value) || 0 })}
-          rightIcon={<span style={unitStyle}>회</span>}
           aria-label={`${setNumber}번 세트 횟수`}
           min="0"
           step="1"
-          size="sm"
-          fullWidth={true}
+          style={inputStyle}
+          className="no-spinner"
         />
+        <span style={unitStyle}>회</span>
       </div>
+      <style jsx>{`
+        input.no-spinner::-webkit-outer-spin-button,
+        input.no-spinner::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        input.no-spinner[type='number'] {
+          -moz-appearance: textfield;
+        }
+      `}</style>
 
-      {/* 완료 체크 */}
-      <Checkbox
-        checked={set.completed}
-        onChange={(checked) => onUpdate({ completed: checked })}
+      {/* 완료 버튼 */}
+      <button
+        onClick={() => onUpdate({ completed: !set.completed })}
         aria-label={`${setNumber}번 세트 완료`}
-      />
+        aria-pressed={set.completed}
+        style={completeButtonStyle}
+        onMouseEnter={(e) => {
+          if (!set.completed) {
+            e.currentTarget.style.background = isDark ? colors.dark.surfaceTertiary : colors.light.surfaceTertiary;
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!set.completed) {
+            e.currentTarget.style.background = 'transparent';
+          }
+        }}
+      >
+        ✓
+      </button>
 
       {/* 삭제 버튼 */}
-      <Button
-        variant="ghost"
-        size="sm"
+      <button
         onClick={onDelete}
         aria-label={`${setNumber}번 세트 삭제`}
         style={deleteButtonStyle}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.color = colors.secondary.red;
+          e.currentTarget.style.background = isDark ? colors.dark.surfaceTertiary : colors.light.surfaceTertiary;
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.color = isDark ? colors.text.dark.tertiary : colors.text.light.tertiary;
+          e.currentTarget.style.background = 'transparent';
+        }}
       >
-        🗑️
-      </Button>
+        ×
+      </button>
     </div>
   );
 }

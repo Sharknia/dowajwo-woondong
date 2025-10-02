@@ -1,12 +1,31 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/Card';
-import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { SetInput, SetFormData } from './SetInput';
 import { useTheme } from '@/contexts/ThemeContext';
 import { colors, spacing, typography } from '@/lib/design-system';
+
+// 운동 종목 목록
+const EXERCISE_OPTIONS = [
+  '벤치프레스',
+  '인클라인 벤치프레스',
+  '디클라인 벤치프레스',
+  '스쿼트',
+  '레그 프레스',
+  '데드리프트',
+  '풀업',
+  '랫 풀다운',
+  '바벨 로우',
+  '덤벨 로우',
+  '숄더 프레스',
+  '레터럴 레이즈',
+  '바이셉 컬',
+  '트라이셉 익스텐션',
+  '레그 컬',
+  '레그 익스텐션',
+];
 
 export interface ExerciseFormData {
   id: string;
@@ -29,6 +48,24 @@ export function ExerciseInput({ exercise, onUpdate, onDelete }: ExerciseInputPro
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuHovered, setIsMenuHovered] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // 외부 클릭 감지
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    }
+
+    if (isMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [isMenuOpen]);
 
   const headerStyle: React.CSSProperties = {
     display: 'flex',
@@ -45,6 +82,19 @@ export function ExerciseInput({ exercise, onUpdate, onDelete }: ExerciseInputPro
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
   };
 
+  const selectStyle: React.CSSProperties = {
+    width: '100%',
+    background: isDark ? colors.dark.surfaceTertiary : colors.light.surfaceTertiary,
+    border: `2px solid ${colors.primary.neonGreen}`,
+    borderRadius: '8px',
+    padding: `${spacing[2]} ${spacing[3]}`,
+    fontSize: typography.fontSize.base,
+    fontWeight: typography.fontWeight.medium,
+    color: isDark ? colors.text.dark.primary : colors.text.light.primary,
+    outline: 'none',
+    cursor: 'pointer',
+  };
+
   const editButtonStyle: React.CSSProperties = {
     padding: spacing[1],
     minWidth: '36px',
@@ -52,6 +102,9 @@ export function ExerciseInput({ exercise, onUpdate, onDelete }: ExerciseInputPro
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: '8px',
+    background: isMenuHovered ? (isDark ? colors.dark.surfaceSecondary : colors.light.surfaceSecondary) : 'transparent',
+    transition: 'background 0.2s ease',
   };
 
   const menuButtonStyle: React.CSSProperties = {
@@ -136,70 +189,81 @@ export function ExerciseInput({ exercise, onUpdate, onDelete }: ExerciseInputPro
         {/* 운동 헤더 */}
         <div style={headerStyle}>
           {exercise.isEditing ? (
-            <Input
+            <select
               value={exercise.name}
-              onChange={(e) => handleNameChange(e.target.value)}
-              placeholder="운동 이름 입력"
-              aria-label="운동 이름"
-              onBlur={() => {
-                if (exercise.name.trim()) {
+              onChange={(e) => {
+                handleNameChange(e.target.value);
+                if (e.target.value) {
                   onUpdate(exercise.id, { isEditing: false });
                 }
               }}
+              aria-label="운동 선택"
+              style={selectStyle}
               autoFocus
-            />
+            >
+              <option value="">운동 선택</option>
+              {EXERCISE_OPTIONS.map(option => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
           ) : (
             <h3 style={exerciseNameStyle} id={`exercise-${exercise.id}`}>
               {exercise.name || '운동 이름 없음'}
             </h3>
           )}
 
-          <div style={menuButtonStyle}>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="운동 메뉴"
-              aria-expanded={isMenuOpen}
-              style={editButtonStyle}
-            >
-              ⋯
-            </Button>
-            <div style={menuStyle} role="menu">
-              <button
-                style={menuItemStyle}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  toggleEditMode();
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = isDark ? colors.dark.surfaceSecondary : colors.light.surfaceSecondary;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'none';
-                }}
-                role="menuitem"
+          {exercise.name && (
+            <div style={menuButtonStyle} ref={menuRef}>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                onMouseEnter={() => setIsMenuHovered(true)}
+                onMouseLeave={() => setIsMenuHovered(false)}
+                aria-label="운동 메뉴"
+                aria-expanded={isMenuOpen}
+                style={editButtonStyle}
               >
-                수정하기
-              </button>
-              <button
-                style={menuItemDeleteStyle}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  onDelete(exercise.id);
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = isDark ? colors.dark.surfaceSecondary : colors.light.surfaceSecondary;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'none';
-                }}
-                role="menuitem"
-              >
-                삭제하기
-              </button>
+                ⋯
+              </Button>
+              <div style={menuStyle} role="menu">
+                <button
+                  style={menuItemStyle}
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    toggleEditMode();
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = isDark ? colors.dark.surfaceSecondary : colors.light.surfaceSecondary;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'none';
+                  }}
+                  role="menuitem"
+                >
+                  수정하기
+                </button>
+                <button
+                  style={menuItemDeleteStyle}
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    onDelete(exercise.id);
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = isDark ? colors.dark.surfaceSecondary : colors.light.surfaceSecondary;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'none';
+                  }}
+                  role="menuitem"
+                >
+                  삭제하기
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* 세트 목록 */}
@@ -217,7 +281,7 @@ export function ExerciseInput({ exercise, onUpdate, onDelete }: ExerciseInputPro
 
         {/* 세트 추가 버튼 */}
         <Button
-          variant="outline"
+          variant="secondary"
           size="sm"
           onClick={handleAddSet}
           style={addSetButtonStyle}
