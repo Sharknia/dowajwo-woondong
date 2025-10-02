@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { useTheme } from '@/contexts/ThemeContext';
 import { colors, spacing, typography } from '@/lib/design-system';
 import { getExerciseTemplate, updateExerciseTemplate, deleteExerciseTemplate } from '@/lib/api/exercise-template';
@@ -78,7 +79,7 @@ export default function ExerciseTemplateDetailPage() {
   };
 
   const handleCancel = () => {
-    setIsEditing(false);
+    router.back();
   };
 
   if (!template) return <div>로딩 중...</div>;
@@ -92,21 +93,6 @@ export default function ExerciseTemplateDetailPage() {
     paddingBottom: '120px',
   };
 
-  const headerContainerStyle: React.CSSProperties = {
-    position: 'sticky',
-    top: 0,
-    zIndex: 100,
-    width: '100%',
-    maxWidth: '420px',
-    padding: `0 ${spacing[4]} ${spacing[4]} ${spacing[4]}`,
-  };
-
-  const titleStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.xl,
-    fontWeight: typography.fontWeight.bold,
-    color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-    textAlign: 'center',
-  };
 
   const contentStyle: React.CSSProperties = {
     width: '100%',
@@ -150,9 +136,11 @@ export default function ExerciseTemplateDetailPage() {
 
   return (
     <div style={containerStyle}>
-      <div style={headerContainerStyle}>
-        <h1 style={titleStyle}>{isEditing ? '운동 편집' : template.name}</h1>
-      </div>
+      <PageHeader
+        title={isEditing ? '운동 편집' : '운동 정보'}
+        layout="centered"
+        sticky
+      />
 
       <main style={contentStyle}>
         {isEditing ? (
@@ -227,48 +215,55 @@ export default function ExerciseTemplateDetailPage() {
         ) : (
           <>
             <Card variant="default" padding="lg">
-              <h3 style={{
-                marginBottom: spacing[2],
-                fontSize: typography.fontSize.base,
-                fontWeight: typography.fontWeight.semibold,
-                color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-              }}>
-                운동 정보
-              </h3>
-              <p style={{
-                fontSize: typography.fontSize.sm,
-                color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-                marginBottom: spacing[1],
-              }}>
-                부위: {template.category}
-              </p>
-              <p style={{
-                fontSize: typography.fontSize.sm,
-                color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-                marginBottom: spacing[1],
-              }}>
-                기구: {template.equipmentType}
-              </p>
-              <p style={{
-                fontSize: typography.fontSize.sm,
-                color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-              }}>
-                단위: {template.defaultWeightUnit}
-              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[3] }}>
+                <div>
+                  <h2 style={{
+                    fontSize: typography.fontSize['2xl'],
+                    fontWeight: typography.fontWeight.bold,
+                    color: isDark ? colors.text.dark.primary : colors.text.light.primary,
+                    marginBottom: spacing[3],
+                  }}>
+                    {template.name}
+                  </h2>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[2] }}>
+                    <p style={{
+                      fontSize: typography.fontSize.base,
+                      color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
+                    }}>
+                      부위: {template.category}
+                    </p>
+                    <p style={{
+                      fontSize: typography.fontSize.base,
+                      color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
+                    }}>
+                      기구: {template.equipmentType}
+                    </p>
+                    <p style={{
+                      fontSize: typography.fontSize.base,
+                      color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
+                    }}>
+                      단위: {template.defaultWeightUnit}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </Card>
+
             {template.notes && (
               <Card variant="default" padding="lg">
                 <h3 style={{
-                  marginBottom: spacing[2],
-                  fontSize: typography.fontSize.base,
+                  fontSize: typography.fontSize.lg,
                   fontWeight: typography.fontWeight.semibold,
                   color: isDark ? colors.text.dark.primary : colors.text.light.primary,
+                  marginBottom: spacing[3],
                 }}>
                   메모
                 </h3>
                 <p style={{
-                  fontSize: typography.fontSize.sm,
+                  fontSize: typography.fontSize.base,
                   color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
+                  lineHeight: 1.6,
+                  wordBreak: 'break-word',
                 }}>
                   {template.notes}
                 </p>
@@ -282,13 +277,13 @@ export default function ExerciseTemplateDetailPage() {
         <div style={bottomBarContentStyle}>
           {isEditing ? (
             <>
-              <Button variant="outline" onClick={handleCancel} fullWidth>취소</Button>
+              <Button variant="outline" onClick={() => setIsEditing(false)} fullWidth>취소</Button>
               <Button variant="primary" onClick={handleSave} isLoading={isSaving} disabled={isSaving} fullWidth>저장</Button>
             </>
           ) : (
             <>
-              <Button variant="outline" onClick={handleDelete} fullWidth>삭제</Button>
-              <Button variant="primary" onClick={() => router.push(`/workout/edit?templateId=${template.id}`)} fullWidth>이 운동으로 세션 시작</Button>
+              <Button variant="outline" onClick={handleCancel} fullWidth>취소</Button>
+              <Button variant="primary" onClick={handleDelete} fullWidth>삭제</Button>
             </>
           )}
         </div>

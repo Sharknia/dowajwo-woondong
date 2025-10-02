@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { useTheme } from '@/contexts/ThemeContext';
 import { colors, spacing, typography } from '@/lib/design-system';
 import { createExerciseTemplate } from '@/lib/api/exercise-template';
@@ -60,21 +61,6 @@ export default function NewExerciseTemplatePage() {
     paddingBottom: '120px',
   };
 
-  const headerContainerStyle: React.CSSProperties = {
-    position: 'sticky',
-    top: 0,
-    zIndex: 100,
-    width: '100%',
-    maxWidth: '420px',
-    padding: `0 ${spacing[4]} ${spacing[4]} ${spacing[4]}`,
-  };
-
-  const titleStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.xl,
-    fontWeight: typography.fontWeight.bold,
-    color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-    textAlign: 'center',
-  };
 
   const contentStyle: React.CSSProperties = {
     width: '100%',
@@ -118,9 +104,7 @@ export default function NewExerciseTemplatePage() {
 
   return (
     <div style={containerStyle}>
-      <div style={headerContainerStyle}>
-        <h1 style={titleStyle}>운동 추가</h1>
-      </div>
+      <PageHeader title="운동 추가" layout="centered" sticky />
 
       <main style={contentStyle}>
         <Card variant="default" padding="lg">

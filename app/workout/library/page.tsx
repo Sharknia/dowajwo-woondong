@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { NavigationBar } from '@/components/ui/NavigationBar';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { ExerciseTemplateCard } from '@/components/workout/ExerciseTemplateCard';
 import { useTheme } from '@/contexts/ThemeContext';
 import { colors, spacing, typography } from '@/lib/design-system';
@@ -64,39 +65,11 @@ export default function WorkoutLibraryPage() {
     paddingBottom: '100px',
   };
 
-  const headerStyle: React.CSSProperties = {
-    position: 'sticky',
-    top: 0,
-    zIndex: 100,
-    background: isDark ? colors.dark.background : colors.light.background,
-    padding: spacing[4],
-    borderBottom: `1px solid ${isDark ? colors.dark.surfaceTertiary : colors.light.surfaceTertiary}`,
-  };
-
-  const headerContentStyle: React.CSSProperties = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    maxWidth: '420px',
-    margin: '0 auto',
-  };
-
-  const titleStyle: React.CSSProperties = {
-    fontSize: typography.fontSize['2xl'],
-    fontWeight: typography.fontWeight.bold,
-    color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-  };
-
-  const addButtonStyle: React.CSSProperties = {
-    minWidth: '44px',
-    minHeight: '44px',
-    fontSize: typography.fontSize.xl,
-  };
 
   const filtersStyle: React.CSSProperties = {
     display: 'flex',
     gap: spacing[2],
-    padding: `${spacing[3]} ${spacing[4]}`,
+    padding: `0 ${spacing[4]} ${spacing[3]} ${spacing[4]}`,
     maxWidth: '420px',
     margin: '0 auto',
   };
@@ -150,21 +123,14 @@ export default function WorkoutLibraryPage() {
 
   return (
     <div style={containerStyle}>
-      {/* 헤더 */}
-      <header style={headerStyle}>
-        <div style={headerContentStyle}>
-          <h1 style={titleStyle}>내 운동</h1>
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={() => router.push('/workout/library/new')}
-            style={addButtonStyle}
-            aria-label="운동 추가"
-          >
-            +
-          </Button>
-        </div>
-      </header>
+      <PageHeader
+        title="내 운동"
+        action={{
+          label: '운동 추가',
+          onClick: () => router.push('/workout/library/new'),
+          icon: '+',
+        }}
+      />
 
       {/* 필터/정렬 */}
       <div style={filtersStyle}>
