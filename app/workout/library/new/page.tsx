@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Card, PageHeader, Input, Select, Textarea, Form, FormGroup } from '@/components/ui';
+import { Button, Card, PageHeader, Input, Select, Textarea, Form, RadioGroup } from '@/components/ui';
 import { useTheme } from '@/contexts/ThemeContext';
 import { colors, spacing } from '@/lib/design-system';
 import { createExerciseTemplate } from '@/lib/api/exercise-template';
@@ -112,6 +112,11 @@ export default function NewExerciseTemplatePage() {
     label: value,
   }));
 
+  const weightUnitOptions = [
+    { value: WeightUnit.KG, label: 'kg' },
+    { value: WeightUnit.LBS, label: 'lbs' },
+  ];
+
   return (
     <div style={containerStyle}>
       <PageHeader title="운동 추가" layout="centered" sticky />
@@ -151,51 +156,15 @@ export default function NewExerciseTemplatePage() {
               fullWidth
             />
 
-            <FormGroup gap="sm">
-              <label style={{
-                fontSize: '14px',
-                fontWeight: 500,
-                color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-              }}>
-                무게 단위 *
-              </label>
-              <div style={{ display: 'flex', gap: spacing[3] }}>
-                <label style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: spacing[2],
-                  cursor: 'pointer',
-                  fontSize: '16px',
-                  color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-                }}>
-                  <input
-                    type="radio"
-                    value={WeightUnit.KG}
-                    checked={formData.defaultWeightUnit === WeightUnit.KG}
-                    onChange={() => setFormData({ ...formData, defaultWeightUnit: WeightUnit.KG })}
-                    disabled={isSaving}
-                  />
-                  kg
-                </label>
-                <label style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: spacing[2],
-                  cursor: 'pointer',
-                  fontSize: '16px',
-                  color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-                }}>
-                  <input
-                    type="radio"
-                    value={WeightUnit.LBS}
-                    checked={formData.defaultWeightUnit === WeightUnit.LBS}
-                    onChange={() => setFormData({ ...formData, defaultWeightUnit: WeightUnit.LBS })}
-                    disabled={isSaving}
-                  />
-                  lbs
-                </label>
-              </div>
-            </FormGroup>
+            <RadioGroup
+              label="무게 단위 *"
+              name="weightUnit"
+              value={formData.defaultWeightUnit}
+              onChange={(value) => setFormData({ ...formData, defaultWeightUnit: value as WeightUnit })}
+              options={weightUnitOptions}
+              orientation="horizontal"
+              disabled={isSaving}
+            />
 
             <Textarea
               label="메모"

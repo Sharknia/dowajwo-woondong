@@ -9,6 +9,8 @@
 | **Select** | label, error, hint, size(sm/md/lg), options, fullWidth | ARIA: aria-invalid, aria-describedby |
 | **Textarea** | label, error, hint, size(sm/md/lg), resize(none/vertical/horizontal/both), fullWidth | ARIA: aria-invalid, aria-describedby |
 | **Checkbox** | label, size(sm/md/lg), error | ARIA: aria-invalid |
+| **Radio** | label, size(sm/md/lg), error | ARIA: aria-invalid (개별 라디오) |
+| **RadioGroup** | label, options, value, onChange, name, error, hint, size(sm/md/lg), orientation(horizontal/vertical) | ARIA: role="radiogroup" |
 | **Card** | padding(sm/md/lg/xl), variant(default/elevated/outlined), onClick | 클릭 시 role="button" |
 | **Form/FormGroup/FormRow** | gap, children | 레이아웃 관리 |
 | **Divider** | text, orientation(horizontal/vertical) | 구분선 |
@@ -36,7 +38,7 @@
 
 ### 기본 UI
 ```typescript
-import { Button, Input, Select, Textarea, Card } from '@/components/ui';
+import { Button, Input, Select, Textarea, RadioGroup, Card } from '@/components/ui';
 
 <Card padding="lg" variant="elevated">
   <Input
@@ -52,12 +54,23 @@ import { Button, Input, Select, Textarea, Card } from '@/components/ui';
       { value: 'BACK', label: '등' }
     ]}
   />
+  <RadioGroup
+    label="무게 단위"
+    name="weightUnit"
+    value={selectedUnit}
+    onChange={(value) => setSelectedUnit(value)}
+    options={[
+      { value: 'kg', label: 'kg' },
+      { value: 'lbs', label: 'lbs' }
+    ]}
+    orientation="horizontal"
+  />
   <Textarea
     label="메모"
     placeholder="설명 입력"
     resize="vertical"
   />
-  <Button variant="primary" fullWidth>로그인</Button>
+  <Button variant="primary" fullWidth>저장</Button>
 </Card>
 ```
 
@@ -147,4 +160,4 @@ getAllWorkoutSessions(): Promise<WorkoutSession[]>
 - ✅ 키보드: Tab/Enter/Space
 - ✅ 대비율: 4.5:1+
 
-**최종 업데이트**: 2025-10-06 (Select, Textarea 컴포넌트 추가)
+**최종 업데이트**: 2025-10-06 (Select, Textarea, Radio, RadioGroup 컴포넌트 추가)

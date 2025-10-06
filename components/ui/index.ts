@@ -12,6 +12,11 @@ export type { TextareaSize } from './Textarea';
 
 export { Checkbox } from './Checkbox';
 
+export { Radio } from './Radio';
+
+export { RadioGroup } from './RadioGroup';
+export type { RadioGroupSize, RadioGroupOrientation } from './RadioGroup';
+
 export { Card } from './Card';
 
 export { Form, FormGroup, FormRow } from './Form';
