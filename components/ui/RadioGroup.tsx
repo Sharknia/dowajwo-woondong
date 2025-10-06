@@ -3,7 +3,7 @@
 import React from 'react';
 import { Radio } from './Radio';
 import { useTheme } from '@/contexts/ThemeContext';
-import { colors, typography, spacing } from '@/lib/design-system';
+import { colors, spacing, getTypographyStyle } from '@/lib/design-system';
 
 export type RadioGroupSize = 'sm' | 'md' | 'lg';
 export type RadioGroupOrientation = 'horizontal' | 'vertical';
@@ -51,10 +51,8 @@ export function RadioGroup({
   };
 
   const labelStyle = {
-    fontSize: typography.fontSize.sm,
-    fontWeight: typography.fontWeight.medium,
+    ...getTypographyStyle('label'),
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-    fontFamily: typography.fontFamily.sans,
   };
 
   const optionsContainerStyle = {
@@ -65,8 +63,7 @@ export function RadioGroup({
   };
 
   const messageStyle = {
-    fontSize: typography.fontSize.xs,
-    fontFamily: typography.fontFamily.sans,
+    ...getTypographyStyle('small'),
     marginTop: spacing[1],
   };
 

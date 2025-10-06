@@ -2,116 +2,48 @@
 
 import React from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
-import { colors, typography, spacing, borderRadius, shadows } from '@/lib/design-system';
+import { colors, spacing, getTypographyStyle } from '@/lib/design-system';
+import type { TypographyPreset } from '@/lib/design-system';
 
 interface LogoProps {
   size?: 'sm' | 'md' | 'lg';
-  animated?: boolean;
-  showText?: boolean;
-  title?: string;
-  subtitle?: string;
+  align?: 'left' | 'center';
 }
 
-export function Logo({
-  size = 'md',
-  animated = true,
-  showText = true,
-  title = 'Dowajwo-Woondong',
-  subtitle
-}: LogoProps) {
+export function Logo({ size = 'md', align = 'left' }: LogoProps) {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
 
   const sizeMap = {
-    sm: {
-      icon: '48px',
-      svg: '28',
-      title: typography.fontSize.lg,
-      subtitle: typography.fontSize.xs,
-    },
-    md: {
-      icon: '80px',
-      svg: '48',
-      title: typography.fontSize['2xl'],
-      subtitle: typography.fontSize.sm,
-    },
-    lg: {
-      icon: '120px',
-      svg: '72',
-      title: typography.fontSize['3xl'],
-      subtitle: typography.fontSize.base,
-    },
+    sm: { title: 'h3', subtitle: 'small' as TypographyPreset },
+    md: { title: 'h1', subtitle: 'caption' as TypographyPreset },
+    lg: { title: 'display', subtitle: 'body' as TypographyPreset },
   };
 
   const containerStyle = {
-    textAlign: 'center' as const,
-  };
-
-  const logoIconStyle = {
-    width: sizeMap[size].icon,
-    height: sizeMap[size].icon,
-    margin: '0 auto',
-    marginBottom: showText ? spacing[4] : 0,
-    background: colors.gradients.neonGlow,
-    borderRadius: borderRadius.full,
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    boxShadow: shadows.glow.green,
-    animation: animated ? 'pulse 2s infinite' : 'none',
+    flexDirection: 'column' as const,
+    alignItems: align === 'center' ? 'center' : 'flex-start',
+    gap: spacing[1],
   };
 
   const titleStyle = {
-    fontSize: sizeMap[size].title,
-    fontWeight: typography.fontWeight.bold,
-    color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-    marginBottom: subtitle ? spacing[2] : 0,
-    fontFamily: typography.fontFamily.sans,
+    ...getTypographyStyle(sizeMap[size].title as TypographyPreset),
+    background: colors.gradients.neonGlow,
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text',
   };
 
   const subtitleStyle = {
-    fontSize: sizeMap[size].subtitle,
+    ...getTypographyStyle(sizeMap[size].subtitle),
     color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-    fontFamily: typography.fontFamily.sans,
   };
 
   return (
     <div style={containerStyle}>
-      <style jsx global>{`
-        @keyframes pulse {
-          0% {
-            box-shadow: 0 0 20px rgba(50, 215, 75, 0.5), 0 0 40px rgba(50, 215, 75, 0.3);
-          }
-          50% {
-            box-shadow: 0 0 30px rgba(50, 215, 75, 0.7), 0 0 60px rgba(50, 215, 75, 0.5);
-          }
-          100% {
-            box-shadow: 0 0 20px rgba(50, 215, 75, 0.5), 0 0 40px rgba(50, 215, 75, 0.3);
-          }
-        }
-      `}</style>
-
-      <div style={logoIconStyle}>
-        <svg
-          width={sizeMap[size].svg}
-          height={sizeMap[size].svg}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="white"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M13 4l7 7-7 7M6 17l7-7-7-7" />
-        </svg>
-      </div>
-
-      {showText && (
-        <>
-          <h1 style={titleStyle}>{title}</h1>
-          {subtitle && <p style={subtitleStyle}>{subtitle}</p>}
-        </>
-      )}
+      <h1 style={titleStyle}>도와줘 운동</h1>
+      <p style={subtitleStyle}>AI 운동 트레이너</p>
     </div>
   );
 }

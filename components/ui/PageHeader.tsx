@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
-import { colors, spacing, typography } from '@/lib/design-system';
+import { colors, spacing, getTypographyStyle } from '@/lib/design-system';
 
 interface PageHeaderAction {
   label: string;
@@ -52,13 +52,13 @@ export function PageHeader({
   };
 
   const titleStyle: React.CSSProperties = {
-    fontSize: layout === 'centered' ? typography.fontSize.xl : typography.fontSize['2xl'],
-    fontWeight: typography.fontWeight.bold,
+    ...getTypographyStyle(layout === 'centered' ? 'h2' : 'h1'),
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
     margin: 0,
   };
 
   const actionButtonStyle: React.CSSProperties = {
+    ...getTypographyStyle('body'),
     minWidth: '44px',
     minHeight: '44px',
     background: isActionHovered
@@ -70,8 +70,6 @@ export function PageHeader({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: action?.icon ? typography.fontSize.xl : typography.fontSize.base,
-    fontWeight: typography.fontWeight.semibold,
     color: colors.primary.neonGreen,
     transition: 'background 0.2s ease',
     padding: action?.icon ? 0 : `${spacing[2]} ${spacing[3]}`,

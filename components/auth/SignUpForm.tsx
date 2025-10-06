@@ -148,13 +148,7 @@ export function SignUpForm({ onSubmit, onLoginClick }: SignUpFormProps) {
   return (
     <AuthLayout>
       <div style={logoContainerStyle}>
-        <Logo
-          size="md"
-          animated={true}
-          showText={true}
-          title="회원가입"
-          subtitle="AI 운동 트레이너와 함께 시작하세요"
-        />
+        <Logo size="md" align="center" />
       </div>
 
           <Form onSubmit={handleSubmit}>

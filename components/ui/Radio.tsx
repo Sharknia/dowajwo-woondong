@@ -2,7 +2,7 @@
 
 import React, { forwardRef } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
-import { colors, typography, spacing, focus } from '@/lib/design-system';
+import { colors, spacing, focus, getTypographyStyle } from '@/lib/design-system';
 
 interface RadioProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'style' | 'size'> {
   label?: string;
@@ -45,18 +45,16 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
     };
 
     const labelStyle = {
-      fontSize: size === 'sm' ? typography.fontSize.xs : size === 'md' ? typography.fontSize.sm : typography.fontSize.base,
+      ...getTypographyStyle(size === 'sm' ? 'small' : size === 'md' ? 'caption' : 'body'),
       color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-      fontFamily: typography.fontFamily.sans,
       cursor: disabled ? 'not-allowed' : 'pointer',
       userSelect: 'none' as const,
     };
 
     const errorStyle = {
-      fontSize: typography.fontSize.xs,
+      ...getTypographyStyle('small'),
       color: colors.utility.error,
       marginTop: spacing[1],
-      fontFamily: typography.fontFamily.sans,
     };
 
     return (
