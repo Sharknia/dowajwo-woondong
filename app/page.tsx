@@ -126,7 +126,7 @@ function HomeContent() {
   };
 
   const recentWorkoutsTitleStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.xl,
+    fontSize: typography.fontSize.h2,
     fontWeight: typography.fontWeight.bold,
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
     marginBottom: spacing[4],

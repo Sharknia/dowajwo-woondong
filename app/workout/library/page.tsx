@@ -83,7 +83,7 @@ export default function WorkoutLibraryPage() {
     border: 'none',
     borderRadius: '8px',
     padding: `${spacing[2]} ${spacing[3]}`,
-    fontSize: typography.fontSize.sm,
+    fontSize: typography.fontSize.caption,
     fontWeight: typography.fontWeight.medium,
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
     cursor: 'pointer',
@@ -106,14 +106,14 @@ export default function WorkoutLibraryPage() {
   };
 
   const emptyTitleStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.xl,
+    fontSize: typography.fontSize.h2,
     fontWeight: typography.fontWeight.bold,
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
     marginBottom: spacing[2],
   };
 
   const emptyDescStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.base,
+    fontSize: typography.fontSize.body,
     color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
     marginBottom: spacing[4],
   };

@@ -47,19 +47,19 @@ export function SetCard({ set, setNumber, onClick }: SetCardProps) {
   };
 
   const weightStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.sm,
+    fontSize: typography.fontSize.caption,
     fontWeight: typography.fontWeight.bold,
     color: colors.primary.neonGreen,
   };
 
   const separatorStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.xs,
+    fontSize: typography.fontSize.small,
     color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
     fontWeight: typography.fontWeight.regular,
   };
 
   const repsStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.sm,
+    fontSize: typography.fontSize.caption,
     fontWeight: typography.fontWeight.medium,
     color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
   };

@@ -45,7 +45,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     };
 
     const labelStyle = {
-      fontSize: size === 'sm' ? typography.fontSize.xs : size === 'md' ? typography.fontSize.sm : typography.fontSize.base,
+      fontSize: size === 'sm' ? typography.fontSize.small : size === 'md' ? typography.fontSize.caption : typography.fontSize.body,
       color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
       fontFamily: typography.fontFamily.sans,
       cursor: disabled ? 'not-allowed' : 'pointer',
@@ -53,7 +53,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     };
 
     const errorStyle = {
-      fontSize: typography.fontSize.xs,
+      fontSize: typography.fontSize.small,
       color: colors.utility.error,
       marginTop: spacing[1],
       fontFamily: typography.fontFamily.sans,

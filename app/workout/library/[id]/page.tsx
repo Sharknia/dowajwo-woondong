@@ -2,30 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
-import { PageHeader } from '@/components/ui/PageHeader';
-import { useTheme } from '@/contexts/ThemeContext';
-import { colors, spacing, typography } from '@/lib/design-system';
+import { CenteredCardLayout, PageHeader } from '@/components/ui';
+import { ExerciseTemplateForm, ExerciseTemplateFormFooter } from '@/components/workout/ExerciseTemplateForm';
 import { getExerciseTemplate, updateExerciseTemplate, deleteExerciseTemplate } from '@/lib/api/exercise-template';
 import type { ExerciseTemplate } from '@/types/exercise-template';
-import { ExerciseCategory, EquipmentType, WeightUnit } from '@/types/exercise-template';
 
 export default function ExerciseTemplateDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
-
   const [template, setTemplate] = useState<ExerciseTemplate | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    category: ExerciseCategory.CHEST,
-    equipmentType: EquipmentType.MACHINE,
-    defaultWeightUnit: WeightUnit.KG,
-    notes: '',
-  });
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
@@ -36,30 +21,20 @@ export default function ExerciseTemplateDetailPage() {
     const data = await getExerciseTemplate(params.id as string);
     if (data) {
       setTemplate(data);
-      setFormData({
-        name: data.name,
-        category: data.category,
-        equipmentType: data.equipmentType,
-        defaultWeightUnit: data.defaultWeightUnit,
-        notes: data.notes || '',
-      });
     }
   };
 
-  const handleSave = async () => {
-    if (!formData.name.trim()) {
-      alert('운동명을 입력해주세요.');
-      return;
-    }
-
+  const handleSubmit = async (formData: any) => {
     setIsSaving(true);
     try {
       await updateExerciseTemplate(params.id as string, {
-        ...formData,
+        name: formData.name.trim(),
+        category: formData.category,
+        equipmentType: formData.equipmentType,
+        defaultWeightUnit: formData.defaultWeightUnit,
         notes: formData.notes.trim() || undefined,
       });
-      await loadTemplate();
-      setIsEditing(false);
+      router.push('/workout/library');
     } catch (error) {
       alert('저장에 실패했습니다.');
     } finally {
@@ -84,210 +59,35 @@ export default function ExerciseTemplateDetailPage() {
 
   if (!template) return <div>로딩 중...</div>;
 
-  const containerStyle: React.CSSProperties = {
-    minHeight: '100vh',
-    background: isDark ? colors.dark.background : colors.light.background,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    paddingBottom: '120px',
-  };
-
-
-  const contentStyle: React.CSSProperties = {
-    width: '100%',
-    maxWidth: '420px',
-    padding: `0 ${spacing[4]}`,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: spacing[4],
-    flex: 1,
-  };
-
-  const inputStyle: React.CSSProperties = {
-    width: '100%',
-    background: isDark ? colors.dark.surfaceSecondary : colors.light.surfaceSecondary,
-    border: 'none',
-    borderRadius: '8px',
-    padding: `${spacing[3]} ${spacing[3]}`,
-    fontSize: typography.fontSize.base,
-    color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-  };
-
-  const bottomBarStyle: React.CSSProperties = {
-    position: 'fixed',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    background: isDark ? colors.dark.surface : colors.light.surface,
-    borderTop: `1px solid ${isDark ? colors.dark.surfaceTertiary : colors.light.surfaceTertiary}`,
-    padding: spacing[4],
-    display: 'flex',
-    justifyContent: 'center',
-    zIndex: 100,
-  };
-
-  const bottomBarContentStyle: React.CSSProperties = {
-    width: '100%',
-    maxWidth: '420px',
-    display: 'flex',
-    gap: spacing[2],
-  };
-
   return (
-    <div style={containerStyle}>
-      <PageHeader
-        title={isEditing ? '운동 편집' : '운동 정보'}
-        layout="centered"
-        sticky
+    <CenteredCardLayout
+      maxWidth="420px"
+      header={<PageHeader title="운동 편집" layout="centered" />}
+      footer={
+        <ExerciseTemplateFormFooter
+          onCancel={handleCancel}
+          onSubmit={async () => {}}
+          isSubmitting={isSaving}
+          submitLabel="저장"
+        />
+      }
+      hasFixedFooter={true}
+    >
+      <ExerciseTemplateForm
+        initialData={{
+          name: template.name,
+          category: template.category,
+          equipmentType: template.equipmentType,
+          defaultWeightUnit: template.defaultWeightUnit,
+          notes: template.notes || '',
+        }}
+        onSubmit={handleSubmit}
+        onCancel={handleCancel}
+        onDelete={handleDelete}
+        submitLabel="저장"
+        isSubmitting={isSaving}
+        renderFooter={() => null}
       />
-
-      <main style={contentStyle}>
-        {isEditing ? (
-          <Card variant="default" padding="lg">
-            <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[3] }}>
-              <div>
-                <label style={{
-                  fontSize: typography.fontSize.sm,
-                  color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-                  marginBottom: spacing[2],
-                  display: 'block'
-                }}>
-                  운동명
-                </label>
-                <input
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  style={inputStyle}
-                />
-              </div>
-              <div>
-                <label style={{
-                  fontSize: typography.fontSize.sm,
-                  color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-                  marginBottom: spacing[2],
-                  display: 'block'
-                }}>
-                  부위
-                </label>
-                <select
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value as ExerciseCategory })}
-                  style={inputStyle}
-                >
-                  {Object.entries(ExerciseCategory).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-                </select>
-              </div>
-              <div>
-                <label style={{
-                  fontSize: typography.fontSize.sm,
-                  color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-                  marginBottom: spacing[2],
-                  display: 'block'
-                }}>
-                  기구
-                </label>
-                <select
-                  value={formData.equipmentType}
-                  onChange={(e) => setFormData({ ...formData, equipmentType: e.target.value as EquipmentType })}
-                  style={inputStyle}
-                >
-                  {Object.entries(EquipmentType).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-                </select>
-              </div>
-              <div>
-                <label style={{
-                  fontSize: typography.fontSize.sm,
-                  color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-                  marginBottom: spacing[2],
-                  display: 'block'
-                }}>
-                  메모
-                </label>
-                <textarea
-                  value={formData.notes}
-                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  style={{ ...inputStyle, minHeight: '100px', resize: 'vertical' as const }}
-                />
-              </div>
-            </div>
-          </Card>
-        ) : (
-          <>
-            <Card variant="default" padding="lg">
-              <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[3] }}>
-                <div>
-                  <h2 style={{
-                    fontSize: typography.fontSize['2xl'],
-                    fontWeight: typography.fontWeight.bold,
-                    color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-                    marginBottom: spacing[3],
-                  }}>
-                    {template.name}
-                  </h2>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[2] }}>
-                    <p style={{
-                      fontSize: typography.fontSize.base,
-                      color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-                    }}>
-                      부위: {template.category}
-                    </p>
-                    <p style={{
-                      fontSize: typography.fontSize.base,
-                      color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-                    }}>
-                      기구: {template.equipmentType}
-                    </p>
-                    <p style={{
-                      fontSize: typography.fontSize.base,
-                      color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-                    }}>
-                      단위: {template.defaultWeightUnit}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Card>
-
-            {template.notes && (
-              <Card variant="default" padding="lg">
-                <h3 style={{
-                  fontSize: typography.fontSize.lg,
-                  fontWeight: typography.fontWeight.semibold,
-                  color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-                  marginBottom: spacing[3],
-                }}>
-                  메모
-                </h3>
-                <p style={{
-                  fontSize: typography.fontSize.base,
-                  color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-                  lineHeight: 1.6,
-                  wordBreak: 'break-word',
-                }}>
-                  {template.notes}
-                </p>
-              </Card>
-            )}
-          </>
-        )}
-      </main>
-
-      <div style={bottomBarStyle}>
-        <div style={bottomBarContentStyle}>
-          {isEditing ? (
-            <>
-              <Button variant="outline" onClick={() => setIsEditing(false)} fullWidth>취소</Button>
-              <Button variant="primary" onClick={handleSave} isLoading={isSaving} disabled={isSaving} fullWidth>저장</Button>
-            </>
-          ) : (
-            <>
-              <Button variant="outline" onClick={handleCancel} fullWidth>취소</Button>
-              <Button variant="primary" onClick={handleDelete} fullWidth>삭제</Button>
-            </>
-          )}
-        </div>
-      </div>
-    </div>
+    </CenteredCardLayout>
   );
 }

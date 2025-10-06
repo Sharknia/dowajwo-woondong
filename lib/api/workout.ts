@@ -174,6 +174,7 @@ export function convertFormDataToWorkoutSession(
       id: ex.id,
       name: ex.name,
       sets: ex.sets.map(s => ({
+        id: `set-${Date.now()}-${Math.random()}`,
         weight: s.weight,
         reps: s.reps,
         completed: s.completed,

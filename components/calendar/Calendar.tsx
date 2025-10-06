@@ -166,7 +166,7 @@ export function Calendar({ selectedDate, workoutDates, onDateSelect }: CalendarP
   };
 
   const monthYearStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.xl,
+    fontSize: typography.fontSize.h2,
     fontWeight: typography.fontWeight.bold,
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
   };
@@ -177,7 +177,7 @@ export function Calendar({ selectedDate, workoutDates, onDateSelect }: CalendarP
     color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
     cursor: 'pointer',
     padding: spacing[2],
-    fontSize: typography.fontSize.xl,
+    fontSize: typography.fontSize.h2,
     transition: 'all 0.2s ease',
   };
 
@@ -190,7 +190,7 @@ export function Calendar({ selectedDate, workoutDates, onDateSelect }: CalendarP
 
   const weekdayStyle: React.CSSProperties = {
     textAlign: 'center',
-    fontSize: typography.fontSize.xs,
+    fontSize: typography.fontSize.small,
     fontWeight: typography.fontWeight.semibold,
     color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
     padding: spacing[2],
@@ -268,7 +268,7 @@ export function Calendar({ selectedDate, workoutDates, onDateSelect }: CalendarP
       justifyContent: 'center',
       borderRadius: borderRadius.lg,
       cursor: 'pointer',
-      fontSize: typography.fontSize.sm,
+      fontSize: typography.fontSize.caption,
       fontWeight: isWorkout || isSelected ? typography.fontWeight.bold : typography.fontWeight.regular,
       background,
       color,

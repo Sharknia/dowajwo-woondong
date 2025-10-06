@@ -39,7 +39,7 @@ export function SetInput({ setNumber, set, onUpdate, onDelete }: SetInputProps) 
   };
 
   const setNumberStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.sm,
+    fontSize: typography.fontSize.caption,
     fontWeight: typography.fontWeight.semibold,
     color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
     textAlign: 'center',
@@ -60,7 +60,7 @@ export function SetInput({ setNumber, set, onUpdate, onDelete }: SetInputProps) 
     border: 'none',
     borderRadius: '6px',
     padding: `${spacing[2]} ${spacing[2]}`,
-    fontSize: typography.fontSize.sm,
+    fontSize: typography.fontSize.caption,
     fontWeight: typography.fontWeight.medium,
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
     textAlign: 'center',
@@ -72,7 +72,7 @@ export function SetInput({ setNumber, set, onUpdate, onDelete }: SetInputProps) 
   };
 
   const unitStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.xs,
+    fontSize: typography.fontSize.small,
     fontWeight: typography.fontWeight.medium,
     color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
   };
@@ -86,7 +86,7 @@ export function SetInput({ setNumber, set, onUpdate, onDelete }: SetInputProps) 
       : `2px solid ${isDark ? colors.dark.surfaceTertiary : colors.light.surfaceTertiary}`,
     background: set.completed ? colors.primary.neonGreen : 'transparent',
     color: set.completed ? colors.dark.background : (isDark ? colors.text.dark.tertiary : colors.text.light.tertiary),
-    fontSize: typography.fontSize.xs,
+    fontSize: typography.fontSize.small,
     fontWeight: typography.fontWeight.bold,
     cursor: 'pointer',
     transition: 'all 0.2s ease',
@@ -106,7 +106,7 @@ export function SetInput({ setNumber, set, onUpdate, onDelete }: SetInputProps) 
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: typography.fontSize.lg,
+    fontSize: typography.fontSize.h3,
     transition: 'all 0.2s ease',
   };
 

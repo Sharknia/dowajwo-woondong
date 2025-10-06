@@ -118,14 +118,14 @@ function CalendarPageContent() {
   };
 
   const titleStyle: React.CSSProperties = {
-    fontSize: typography.fontSize['2xl'],
+    fontSize: typography.fontSize.display,
     fontWeight: typography.fontWeight.bold,
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
     marginBottom: spacing[2],
   };
 
   const selectedDateStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.lg,
+    fontSize: typography.fontSize.h2,
     fontWeight: typography.fontWeight.semibold,
     color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
     marginBottom: spacing[4],
@@ -138,7 +138,7 @@ function CalendarPageContent() {
   };
 
   const emptyStateTitleStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.lg,
+    fontSize: typography.fontSize.h2,
     fontWeight: typography.fontWeight.semibold,
     marginBottom: spacing[4],
     color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,

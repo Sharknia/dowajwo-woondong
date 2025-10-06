@@ -59,8 +59,8 @@ function WorkoutEditorContent() {
               id: ex.id,
               name: ex.name,
               sets: ex.sets.map(s => ({
-                id: `set-${Date.now()}-${Math.random()}`,
                 ...s,
+                id: s.id || `set-${Date.now()}-${Math.random()}`,
               })),
               isEditing: false,
             })),
@@ -101,7 +101,7 @@ function WorkoutEditorContent() {
   };
 
   const dateStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.xl,
+    fontSize: typography.fontSize.h2,
     fontWeight: typography.fontWeight.bold,
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
     textAlign: 'center',
@@ -151,22 +151,16 @@ function WorkoutEditorContent() {
   };
 
   const emptyStateTitleStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.lg,
+    fontSize: typography.fontSize.h3,
     fontWeight: typography.fontWeight.semibold,
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
     marginBottom: spacing[2],
   };
 
   const emptyStateDescStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.sm,
+    fontSize: typography.fontSize.caption,
     color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
     marginBottom: spacing[4],
-  };
-
-  const addExerciseButtonStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.base,
-    fontWeight: typography.fontWeight.semibold,
-    marginTop: spacing[2],
   };
 
   const handleExerciseUpdate = (id: string, updates: Partial<ExerciseFormData>) => {
@@ -314,7 +308,6 @@ function WorkoutEditorContent() {
           variant="primary"
           onClick={handleAddExercise}
           fullWidth
-          style={addExerciseButtonStyle}
         >
           + 운동 추가
         </Button>

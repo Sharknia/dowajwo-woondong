@@ -44,7 +44,7 @@ export function ExerciseCard({ exercise, onClick }: ExerciseCardProps) {
   };
 
   const exerciseNameStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.base,
+    fontSize: typography.fontSize.body,
     fontWeight: typography.fontWeight.semibold,
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
     textAlign: 'left',

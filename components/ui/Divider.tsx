@@ -51,7 +51,7 @@ export function Divider({
     };
 
     const textStyle = {
-      fontSize: typography.fontSize.sm,
+      fontSize: typography.fontSize.caption,
       color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
       fontFamily: typography.fontFamily.sans,
     };

@@ -126,7 +126,7 @@ export function NavigationBar({
   };
 
   const labelStyle = (isActive: boolean): React.CSSProperties => ({
-    fontSize: typography.fontSize.xs,
+    fontSize: typography.fontSize.small,
     fontWeight: isActive ? typography.fontWeight.semibold : typography.fontWeight.regular,
     color: isActive
       ? colors.primary.neonGreen

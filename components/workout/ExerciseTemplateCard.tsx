@@ -41,10 +41,6 @@ export function ExerciseTemplateCard({ template, onClick, onEdit, onDelete }: Ex
     }
   }, [isMenuOpen]);
 
-  const containerStyle: React.CSSProperties = {
-    cursor: onClick ? 'pointer' : 'default',
-  };
-
   const headerStyle: React.CSSProperties = {
     display: 'flex',
     justifyContent: 'space-between',
@@ -64,23 +60,23 @@ export function ExerciseTemplateCard({ template, onClick, onEdit, onDelete }: Ex
   };
 
   const iconStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.xl,
+    fontSize: typography.fontSize.h2,
   };
 
   const titleStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.lg,
+    fontSize: typography.fontSize.h3,
     fontWeight: typography.fontWeight.bold,
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
   };
 
   const metaStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.sm,
+    fontSize: typography.fontSize.caption,
     color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
     marginBottom: template.notes ? spacing[2] : 0,
   };
 
   const notesStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.sm,
+    fontSize: typography.fontSize.caption,
     color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -109,7 +105,7 @@ export function ExerciseTemplateCard({ template, onClick, onEdit, onDelete }: Ex
   };
 
   const menuIconStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.xl,
+    fontSize: typography.fontSize.h2,
     color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
     lineHeight: 1,
   };
@@ -136,7 +132,7 @@ export function ExerciseTemplateCard({ template, onClick, onEdit, onDelete }: Ex
     padding: `${spacing[2]} ${spacing[3]}`,
     textAlign: 'left',
     borderRadius: '6px',
-    fontSize: typography.fontSize.sm,
+    fontSize: typography.fontSize.caption,
     fontWeight: typography.fontWeight.medium,
     transition: 'background 0.2s ease',
   };
@@ -158,7 +154,7 @@ export function ExerciseTemplateCard({ template, onClick, onEdit, onDelete }: Ex
   };
 
   return (
-    <Card variant="default" padding="lg" style={containerStyle} onClick={handleCardClick}>
+    <Card variant="default" padding="lg" onClick={handleCardClick}>
       <div style={headerStyle}>
         <div style={contentStyle}>
           <div style={titleContainerStyle}>

@@ -54,14 +54,14 @@ export function WorkoutListItem({ workout, onClick, showDivider = true }: Workou
   };
 
   const exerciseNameStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.base,
+    fontSize: typography.fontSize.body,
     fontWeight: typography.fontWeight.semibold,
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
     margin: 0,
   };
 
   const dateStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.xs,
+    fontSize: typography.fontSize.small,
     color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
   };
 
@@ -78,13 +78,13 @@ export function WorkoutListItem({ workout, onClick, showDivider = true }: Workou
   };
 
   const statValueStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.sm,
+    fontSize: typography.fontSize.caption,
     fontWeight: typography.fontWeight.semibold,
     color: colors.primary.neonGreen,
   };
 
   const statLabelStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.xs,
+    fontSize: typography.fontSize.small,
     color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
   };
 

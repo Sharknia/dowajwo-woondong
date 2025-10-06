@@ -25,7 +25,7 @@ export function RecentWorkoutCard({
   const isDark = theme === 'dark';
 
   const titleStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.xl,
+    fontSize: typography.fontSize.h2,
     fontWeight: typography.fontWeight.bold,
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
     marginBottom: spacing[4],
@@ -43,7 +43,7 @@ export function RecentWorkoutCard({
   };
 
   const emptyTextStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.base,
+    fontSize: typography.fontSize.body,
     color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
     marginBottom: spacing[2],
   };
@@ -58,7 +58,7 @@ export function RecentWorkoutCard({
           <div style={emptyStateStyle}>
             <div style={emptyIconStyle}>📝</div>
             <p style={emptyTextStyle}>아직 운동 기록이 없습니다</p>
-            <p style={{...emptyTextStyle, fontSize: typography.fontSize.sm}}>
+            <p style={{...emptyTextStyle, fontSize: typography.fontSize.caption}}>
               첫 운동을 시작해보세요!
             </p>
           </div>

@@ -27,14 +27,14 @@ export function WorkoutStartCard({ onStartWorkout }: WorkoutStartCardProps) {
   };
 
   const titleStyle = {
-    fontSize: typography.fontSize.xl,
+    fontSize: typography.fontSize.h2,
     fontWeight: typography.fontWeight.bold,
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
     margin: 0,
   };
 
   const descriptionStyle = {
-    fontSize: typography.fontSize.sm,
+    fontSize: typography.fontSize.caption,
     color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
     margin: 0,
   };

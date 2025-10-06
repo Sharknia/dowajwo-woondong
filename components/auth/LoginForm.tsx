@@ -62,12 +62,7 @@ export function LoginForm({ onSubmit, onSignUpClick }: LoginFormProps) {
   return (
     <AuthLayout>
       <div style={logoContainerStyle}>
-        <Logo
-          size="md"
-          animated={true}
-          showText={true}
-          subtitle="AI 운동 트레이너에 오신 것을 환영합니다"
-        />
+        <Logo size="md" align="center" />
       </div>
 
       <Form onSubmit={handleSubmit}>

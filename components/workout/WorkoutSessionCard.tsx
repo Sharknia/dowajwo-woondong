@@ -58,13 +58,13 @@ export function WorkoutSessionCard({ session, onClick, onEdit, onDelete, readOnl
   };
 
   const dateStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.lg,
+    fontSize: typography.fontSize.h3,
     fontWeight: typography.fontWeight.bold,
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
   };
 
   const statsStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.xs,
+    fontSize: typography.fontSize.small,
     color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
   };
 
@@ -88,7 +88,7 @@ export function WorkoutSessionCard({ session, onClick, onEdit, onDelete, readOnl
   };
 
   const editIconStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.xl,
+    fontSize: typography.fontSize.h2,
     color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
     lineHeight: 1,
   };
@@ -118,7 +118,7 @@ export function WorkoutSessionCard({ session, onClick, onEdit, onDelete, readOnl
     padding: `${spacing[2]} ${spacing[3]}`,
     textAlign: 'left',
     borderRadius: '6px',
-    fontSize: typography.fontSize.sm,
+    fontSize: typography.fontSize.caption,
     fontWeight: typography.fontWeight.medium,
     transition: 'background 0.2s ease',
   };

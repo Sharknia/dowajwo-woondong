@@ -77,7 +77,7 @@ export function ExerciseInput({ exercise, onUpdate, onDelete }: ExerciseInputPro
   };
 
   const exerciseNameStyle: React.CSSProperties = {
-    fontSize: typography.fontSize.base,
+    fontSize: typography.fontSize.body,
     fontWeight: typography.fontWeight.semibold,
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
   };
@@ -88,7 +88,7 @@ export function ExerciseInput({ exercise, onUpdate, onDelete }: ExerciseInputPro
     border: `2px solid ${colors.primary.neonGreen}`,
     borderRadius: '8px',
     padding: `${spacing[2]} ${spacing[3]}`,
-    fontSize: typography.fontSize.base,
+    fontSize: typography.fontSize.body,
     fontWeight: typography.fontWeight.medium,
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
     outline: 'none',
@@ -133,7 +133,7 @@ export function ExerciseInput({ exercise, onUpdate, onDelete }: ExerciseInputPro
     padding: `${spacing[2]} ${spacing[3]}`,
     textAlign: 'left',
     borderRadius: '6px',
-    fontSize: typography.fontSize.sm,
+    fontSize: typography.fontSize.caption,
     fontWeight: typography.fontWeight.medium,
     transition: 'background 0.2s ease',
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
@@ -146,11 +146,6 @@ export function ExerciseInput({ exercise, onUpdate, onDelete }: ExerciseInputPro
 
   const setListStyle: React.CSSProperties = {
     marginBottom: spacing[2],
-  };
-
-  const addSetButtonStyle: React.CSSProperties = {
-    width: '100%',
-    fontSize: typography.fontSize.sm,
   };
 
   const handleNameChange = (name: string) => {
@@ -224,7 +219,6 @@ export function ExerciseInput({ exercise, onUpdate, onDelete }: ExerciseInputPro
                 onMouseLeave={() => setIsMenuHovered(false)}
                 aria-label="운동 메뉴"
                 aria-expanded={isMenuOpen}
-                style={editButtonStyle}
               >
                 ⋯
               </Button>
@@ -284,7 +278,7 @@ export function ExerciseInput({ exercise, onUpdate, onDelete }: ExerciseInputPro
           variant="secondary"
           size="sm"
           onClick={handleAddSet}
-          style={addSetButtonStyle}
+          fullWidth
           aria-label="세트 추가"
         >
           + 세트 추가
