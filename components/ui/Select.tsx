@@ -70,7 +70,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         ? `2px solid ${colors.utility.error}`
         : isFocused
         ? (isDark ? focus.input.dark.border : focus.input.light.border)
-        : `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+        : `1px solid ${isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)'}`,
       borderRadius: borderRadius.lg,
       outline: 'none',
       transition: `all 0.3s ease, ${focus.transition}`,
@@ -98,11 +98,21 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
       color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
     };
 
+    // Required asterisk 분리 처리
+    const labelText = label?.replace(/\s*\*\s*$/, '') || '';
+    const isRequired = label?.includes('*');
+
+    const requiredStyle = {
+      color: colors.primary.neonGreen,
+      marginLeft: '2px',
+    };
+
     return (
       <div style={containerStyle}>
         {label && (
           <label htmlFor={selectId} style={labelStyle}>
-            {label}
+            {labelText}
+            {isRequired && <span style={requiredStyle}> *</span>}
           </label>
         )}
         <select

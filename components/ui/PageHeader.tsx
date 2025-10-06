@@ -52,7 +52,7 @@ export function PageHeader({
   };
 
   const titleStyle: React.CSSProperties = {
-    ...getTypographyStyle(layout === 'centered' ? 'h2' : 'h1'),
+    ...getTypographyStyle('h1'),
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
     margin: 0,
   };

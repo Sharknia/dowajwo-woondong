@@ -77,11 +77,21 @@ export function RadioGroup({
     color: isDark ? colors.text.dark.tertiary : colors.text.light.tertiary,
   };
 
+  // Required asterisk 분리 처리
+  const labelText = label?.replace(/\s*\*\s*$/, '') || '';
+  const isRequired = label?.includes('*');
+
+  const requiredStyle = {
+    color: colors.primary.neonGreen,
+    marginLeft: '2px',
+  };
+
   return (
     <div style={containerStyle}>
       {label && (
         <label style={labelStyle} id={`${groupId}-label`}>
-          {label}
+          {labelText}
+          {isRequired && <span style={requiredStyle}> *</span>}
         </label>
       )}
       <div

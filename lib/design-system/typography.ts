@@ -112,7 +112,7 @@ export const typography = {
       letterSpacing: '0', // normal
     },
     label: {
-      fontSize: '0.875rem', // 14px
+      fontSize: '1rem', // 16px
       fontWeight: 500, // medium
       lineHeight: 1.4, // snug
       letterSpacing: '0', // normal
