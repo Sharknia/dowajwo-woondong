@@ -38,7 +38,7 @@ export function PageHeader({
     width: '100%',
     padding: layout === 'centered'
       ? `0 0 ${spacing[6]} 0`
-      : `${spacing[5]} ${spacing[4]}`,
+      : `${spacing[5]} 0`,
     background: sticky ? (isDark ? colors.dark.background : colors.light.background) : 'transparent',
   };
 

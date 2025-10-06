@@ -62,16 +62,19 @@ export default function WorkoutLibraryPage() {
   const containerStyle: React.CSSProperties = {
     minHeight: '100vh',
     background: isDark ? colors.dark.background : colors.light.background,
+    padding: spacing[4],
     paddingBottom: '100px',
   };
 
+  const contentWrapperStyle: React.CSSProperties = {
+    maxWidth: '420px',
+    margin: '0 auto',
+  };
 
   const filtersStyle: React.CSSProperties = {
     display: 'flex',
     gap: spacing[2],
-    padding: `0 ${spacing[4]} ${spacing[3]} ${spacing[4]}`,
-    maxWidth: '420px',
-    margin: '0 auto',
+    paddingBottom: spacing[3],
   };
 
   const selectStyle: React.CSSProperties = {
@@ -84,12 +87,6 @@ export default function WorkoutLibraryPage() {
     fontWeight: typography.fontWeight.medium,
     color: isDark ? colors.text.dark.primary : colors.text.light.primary,
     cursor: 'pointer',
-  };
-
-  const contentStyle: React.CSSProperties = {
-    padding: `0 ${spacing[4]}`,
-    maxWidth: '420px',
-    margin: '0 auto',
   };
 
   const templatesListStyle: React.CSSProperties = {
@@ -123,78 +120,80 @@ export default function WorkoutLibraryPage() {
 
   return (
     <div style={containerStyle}>
-      <PageHeader
-        title="내 운동"
-        action={{
-          label: '운동 추가',
-          onClick: () => router.push('/workout/library/new'),
-          icon: '+',
-        }}
-      />
+      <div style={contentWrapperStyle}>
+        <PageHeader
+          title="내 운동"
+          action={{
+            label: '운동 추가',
+            onClick: () => router.push('/workout/library/new'),
+            icon: '+',
+          }}
+        />
 
-      {/* 필터/정렬 */}
-      <div style={filtersStyle}>
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value as ExerciseCategory | 'all')}
-          style={selectStyle}
-          aria-label="카테고리 필터"
-        >
-          <option value="all">전체</option>
-          {Object.entries(ExerciseCategory).map(([key, value]) => (
-            <option key={key} value={key}>
-              {value}
-            </option>
-          ))}
-        </select>
-
-        <select
-          value={sortOption}
-          onChange={(e) => setSortOption(e.target.value as SortOption)}
-          style={selectStyle}
-          aria-label="정렬"
-        >
-          <option value={SortOption.RECENT}>최근 사용순</option>
-          <option value={SortOption.NAME}>이름순</option>
-          <option value={SortOption.CATEGORY}>부위별</option>
-        </select>
-      </div>
-
-      {/* 템플릿 목록 */}
-      <main style={contentStyle}>
-        {isLoading ? (
-          <p style={{ textAlign: 'center', padding: spacing[4] }}>로딩 중...</p>
-        ) : templates.length === 0 ? (
-          <Card variant="elevated" padding="xl">
-            <div style={emptyStateStyle}>
-              <div style={emptyIconStyle}>💪</div>
-              <h2 style={emptyTitleStyle}>등록된 운동이 없습니다</h2>
-              <p style={emptyDescStyle}>
-                자주 하는 운동을 등록하고<br />
-                빠르게 기록하세요
-              </p>
-              <Button
-                variant="primary"
-                onClick={() => router.push('/workout/library/new')}
-              >
-                첫 운동 추가하기
-              </Button>
-            </div>
-          </Card>
-        ) : (
-          <div style={templatesListStyle}>
-            {templates.map((template) => (
-              <ExerciseTemplateCard
-                key={template.id}
-                template={template}
-                onClick={() => router.push(`/workout/library/${template.id}`)}
-                onEdit={(id) => router.push(`/workout/library/${id}`)}
-                onDelete={handleDelete}
-              />
+        {/* 필터/정렬 */}
+        <div style={filtersStyle}>
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value as ExerciseCategory | 'all')}
+            style={selectStyle}
+            aria-label="카테고리 필터"
+          >
+            <option value="all">전체</option>
+            {Object.entries(ExerciseCategory).map(([key, value]) => (
+              <option key={key} value={key}>
+                {value}
+              </option>
             ))}
-          </div>
-        )}
-      </main>
+          </select>
+
+          <select
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value as SortOption)}
+            style={selectStyle}
+            aria-label="정렬"
+          >
+            <option value={SortOption.RECENT}>최근 사용순</option>
+            <option value={SortOption.NAME}>이름순</option>
+            <option value={SortOption.CATEGORY}>부위별</option>
+          </select>
+        </div>
+
+        {/* 템플릿 목록 */}
+        <main>
+          {isLoading ? (
+            <p style={{ textAlign: 'center', padding: spacing[4] }}>로딩 중...</p>
+          ) : templates.length === 0 ? (
+            <Card variant="elevated" padding="xl">
+              <div style={emptyStateStyle}>
+                <div style={emptyIconStyle}>💪</div>
+                <h2 style={emptyTitleStyle}>등록된 운동이 없습니다</h2>
+                <p style={emptyDescStyle}>
+                  자주 하는 운동을 등록하고<br />
+                  빠르게 기록하세요
+                </p>
+                <Button
+                  variant="primary"
+                  onClick={() => router.push('/workout/library/new')}
+                >
+                  첫 운동 추가하기
+                </Button>
+              </div>
+            </Card>
+          ) : (
+            <div style={templatesListStyle}>
+              {templates.map((template) => (
+                <ExerciseTemplateCard
+                  key={template.id}
+                  template={template}
+                  onClick={() => router.push(`/workout/library/${template.id}`)}
+                  onEdit={(id) => router.push(`/workout/library/${id}`)}
+                  onDelete={handleDelete}
+                />
+              ))}
+            </div>
+          )}
+        </main>
+      </div>
 
       <NavigationBar activeItem="workout" />
     </div>
