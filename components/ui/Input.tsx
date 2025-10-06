@@ -2,7 +2,7 @@
 
 import React, { forwardRef } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
-import { colors, typography, spacing, borderRadius, focus } from '@/lib/design-system';
+import { colors, typography, spacing, borderRadius, focus, getTypographyStyle } from '@/lib/design-system';
 
 export type InputSize = 'sm' | 'md' | 'lg';
 
@@ -42,15 +42,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const sizeStyles = {
       sm: {
         padding: `${spacing[2]} ${spacing[3]}`,
-        fontSize: typography.fontSize.sm,
+        fontSize: typography.fontSize.caption,
       },
       md: {
         padding: `${spacing[3]} ${spacing[4]}`,
-        fontSize: typography.fontSize.base,
+        fontSize: typography.fontSize.body,
       },
       lg: {
         padding: `${spacing[4]} ${spacing[5]}`,
-        fontSize: typography.fontSize.lg,
+        fontSize: typography.fontSize.h3,
       },
     };
 
@@ -62,10 +62,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     };
 
     const labelStyle = {
-      fontSize: typography.fontSize.sm,
-      fontWeight: typography.fontWeight.medium,
+      ...getTypographyStyle('label'),
       color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-      fontFamily: typography.fontFamily.sans,
     };
 
     const inputWrapperStyle = {
@@ -126,8 +124,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     };
 
     const messageStyle = {
-      fontSize: typography.fontSize.xs,
-      fontFamily: typography.fontFamily.sans,
+      ...getTypographyStyle('small'),
       marginTop: spacing[1],
     };
 

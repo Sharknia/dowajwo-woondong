@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
-import { colors, typography, spacing, borderRadius, shadows, focus } from '@/lib/design-system';
+import { colors, typography, spacing, borderRadius, shadows, focus, getTypographyStyle } from '@/lib/design-system';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
 export type ButtonSize = 'sm' | 'md' | 'lg';
@@ -38,15 +38,15 @@ export function Button({
   const sizeStyles = {
     sm: {
       padding: `${spacing[2]} ${spacing[4]}`,
-      fontSize: typography.fontSize.sm,
+      fontSize: typography.fontSize.caption,
     },
     md: {
       padding: `${spacing[3]} ${spacing[5]}`,
-      fontSize: typography.fontSize.base,
+      fontSize: typography.fontSize.body,
     },
     lg: {
       padding: `${spacing[4]} ${spacing[6]}`,
-      fontSize: typography.fontSize.lg,
+      fontSize: typography.fontSize.h3,
     },
   };
 

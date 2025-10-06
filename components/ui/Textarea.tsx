@@ -2,7 +2,7 @@
 
 import React, { forwardRef } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
-import { colors, typography, spacing, borderRadius, focus } from '@/lib/design-system';
+import { colors, typography, spacing, borderRadius, focus, getTypographyStyle } from '@/lib/design-system';
 
 export type TextareaSize = 'sm' | 'md' | 'lg';
 
@@ -36,17 +36,17 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     const sizeStyles = {
       sm: {
         padding: `${spacing[2]} ${spacing[3]}`,
-        fontSize: typography.fontSize.sm,
+        fontSize: typography.fontSize.caption,
         minHeight: '80px',
       },
       md: {
         padding: `${spacing[3]} ${spacing[4]}`,
-        fontSize: typography.fontSize.base,
+        fontSize: typography.fontSize.body,
         minHeight: '100px',
       },
       lg: {
         padding: `${spacing[4]} ${spacing[5]}`,
-        fontSize: typography.fontSize.lg,
+        fontSize: typography.fontSize.h3,
         minHeight: '120px',
       },
     };
@@ -59,10 +59,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     };
 
     const labelStyle = {
-      fontSize: typography.fontSize.sm,
-      fontWeight: typography.fontWeight.medium,
+      ...getTypographyStyle('label'),
       color: isDark ? colors.text.dark.primary : colors.text.light.primary,
-      fontFamily: typography.fontFamily.sans,
     };
 
     const textareaStyle = {
@@ -90,8 +88,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     };
 
     const messageStyle = {
-      fontSize: typography.fontSize.xs,
-      fontFamily: typography.fontFamily.sans,
+      ...getTypographyStyle('small'),
       marginTop: spacing[1],
     };
 
