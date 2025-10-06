@@ -27,19 +27,65 @@
 
 ## 타이포그래피
 
-**Font**: `-apple-system, BlinkMacSystemFont, SF Pro`
+### 폰트 패밀리
+- **Sans**: `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto`
+- **Mono**: `SF Mono, Monaco, "Courier New"`
 
-| Size | Value | Use |
-|------|-------|-----|
-| xs | 12px | 보조 텍스트 |
-| sm | 14px | 일반 텍스트 |
-| base | 16px | 기본 |
-| lg | 18px | 강조 |
-| xl | 20px | 제목 |
-| 2xl | 24px | 큰 제목 |
-| 3xl | 30px | 헤더 |
+### 타입 스케일 (모바일 최적화)
 
-**Weight**: light(300), regular(400), medium(500), semibold(600), bold(700), heavy(800)
+| 이름 | 크기 | 용도 |
+|------|------|------|
+| display | 32px (2rem) | 앱 메인 타이틀 |
+| h1 | 24px (1.5rem) | 페이지 제목 |
+| h2 | 20px (1.25rem) | 섹션 제목 |
+| h3 | 18px (1.125rem) | 서브섹션 |
+| body | 16px (1rem) | 본문 (기본) |
+| caption | 14px (0.875rem) | 보조 텍스트 |
+| small | 12px (0.75rem) | 미세 텍스트 |
+
+### Font Weight
+
+| 이름 | 값 | 용도 |
+|------|-----|------|
+| regular | 400 | 본문, 일반 텍스트 |
+| medium | 500 | 약한 강조, 라벨 |
+| semibold | 600 | 제목, 버튼, 중요 정보 |
+| bold | 700 | 강한 강조, 숫자 데이터 |
+
+### Line Height
+
+| 이름 | 값 | 용도 |
+|------|-----|------|
+| tight | 1.2 | 큰 제목용 |
+| snug | 1.4 | 중간 제목용 |
+| normal | 1.5 | 본문용 |
+| relaxed | 1.6 | 긴 본문용 |
+
+### Letter Spacing
+
+| 이름 | 값 | 용도 |
+|------|-----|------|
+| tight | -0.01em | 큰 제목용 |
+| normal | 0 | 기본 |
+| wide | 0.02em | 작은 텍스트, 대문자용 |
+
+### 타이포그래피 프리셋
+
+사전 정의된 스타일 조합으로 일관된 타이포그래피 적용:
+
+| 프리셋 | 크기 | 무게 | 행간 | 자간 | 용도 |
+|--------|------|------|------|------|------|
+| display | 32px | semibold | tight | tight | 앱 메인 타이틀 |
+| h1 | 24px | semibold | tight | tight | 페이지 제목 |
+| h2 | 20px | semibold | snug | normal | 섹션 제목 |
+| h3 | 18px | semibold | snug | normal | 서브섹션 |
+| body | 16px | regular | normal | normal | 본문 |
+| bodyBold | 16px | semibold | normal | normal | 강조 본문 |
+| caption | 14px | regular | snug | normal | 보조 텍스트 |
+| captionBold | 14px | semibold | snug | normal | 강조 보조 |
+| small | 12px | regular | snug | wide | 미세 텍스트 |
+| button | 16px | semibold | normal | normal | 버튼 텍스트 |
+| label | 14px | medium | snug | normal | 폼 라벨 |
 
 ## 간격 (8px 기반)
 
@@ -86,15 +132,21 @@ box-shadow: 0 0 15px rgba(50, 215, 75, 0.4);
 ## 사용
 
 ```typescript
-import { colors, typography, spacing, focus } from '@/lib/design-system';
+// 프리셋 사용 (권장)
+import { getTypographyStyle } from '@/lib/design-system';
 
-// 컴포넌트 스타일
+<h1 style={getTypographyStyle('h1')}>제목</h1>
+<p style={getTypographyStyle('body')}>본문</p>
+
+// 프리셋 확장
 const style = {
-  color: colors.primary.neonGreen,
-  fontSize: typography.fontSize.base,
-  padding: spacing[4],
-  outline: isFocused ? focus.dark.outline : 'none'
+  ...getTypographyStyle('h2'),
+  color: colors.primary.neonGreen
 };
+
+// 반응형 (globals.css)
+html { font-size: 16px; }
+@media (min-width: 768px) { html { font-size: 18px; } }
 ```
 
-**최종 업데이트**: 2025-10-01
+**최종 업데이트**: 2025-10-06
