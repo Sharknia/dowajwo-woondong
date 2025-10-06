@@ -28,3 +28,5 @@ export { Logo } from './Logo';
 export { PageHeader } from './PageHeader';
 
 export { AuthLayout } from './AuthLayout';
+
+export { CenteredCardLayout } from './CenteredCardLayout';

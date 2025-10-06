@@ -1,36 +1,21 @@
 'use client';
 
 import React from 'react';
-import { Card } from './Card';
-import { spacing } from '@/lib/design-system';
+import { CenteredCardLayout } from './CenteredCardLayout';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
-  maxWidth?: '400px' | '420px' | '450px' | '500px';
+  maxWidth?: '400px' | '420px' | '500px';
 }
 
+/**
+ * 인증 페이지 레이아웃 컴포넌트
+ * CenteredCardLayout을 래핑한 단순 레이아웃
+ */
 export function AuthLayout({ children, maxWidth = '420px' }: AuthLayoutProps) {
-  const containerStyle = {
-    minHeight: '100vh',
-    display: 'flex',
-    flexDirection: 'column' as const,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: spacing[4],
-  };
-
-  const formContainerStyle = {
-    width: '100%',
-    maxWidth: maxWidth,
-  };
-
   return (
-    <div style={containerStyle}>
-      <div style={formContainerStyle}>
-        <Card>
-          {children}
-        </Card>
-      </div>
-    </div>
+    <CenteredCardLayout maxWidth={maxWidth}>
+      {children}
+    </CenteredCardLayout>
   );
 }

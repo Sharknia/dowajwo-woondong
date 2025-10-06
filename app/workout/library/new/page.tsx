@@ -2,16 +2,13 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Card, PageHeader, Input, Select, Textarea, Form, RadioGroup } from '@/components/ui';
-import { useTheme } from '@/contexts/ThemeContext';
-import { colors, spacing } from '@/lib/design-system';
+import { Button, CenteredCardLayout, PageHeader, Input, Select, Textarea, Form, RadioGroup } from '@/components/ui';
+import { spacing } from '@/lib/design-system';
 import { createExerciseTemplate } from '@/lib/api/exercise-template';
 import { ExerciseCategory, EquipmentType, WeightUnit } from '@/types/exercise-template';
 
 export default function NewExerciseTemplatePage() {
   const router = useRouter();
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
 
   const [formData, setFormData] = useState({
     name: '',
@@ -63,38 +60,7 @@ export default function NewExerciseTemplatePage() {
     router.back();
   };
 
-  const containerStyle: React.CSSProperties = {
-    minHeight: '100vh',
-    background: isDark ? colors.dark.background : colors.light.background,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: spacing[4],
-    paddingBottom: '120px',
-  };
-
-  const contentStyle: React.CSSProperties = {
-    width: '100%',
-    maxWidth: '420px',
-  };
-
-  const bottomBarStyle: React.CSSProperties = {
-    position: 'fixed',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    background: isDark ? colors.dark.surface : colors.light.surface,
-    borderTop: `1px solid ${isDark ? colors.dark.surfaceTertiary : colors.light.surfaceTertiary}`,
-    padding: spacing[4],
-    display: 'flex',
-    justifyContent: 'center',
-    zIndex: 100,
-  };
-
-  const bottomBarContentStyle: React.CSSProperties = {
-    width: '100%',
-    maxWidth: '420px',
+  const footerButtonsStyle: React.CSSProperties = {
     display: 'flex',
     gap: spacing[2],
   };
@@ -115,69 +81,11 @@ export default function NewExerciseTemplatePage() {
   ];
 
   return (
-    <div style={containerStyle}>
-      <div style={contentStyle}>
-        <Card>
-          <PageHeader title="운동 추가" layout="centered" />
-
-          <Form onSubmit={handleSave} gap="md">
-            <Input
-              label="운동명 *"
-              type="text"
-              value={formData.name}
-              onChange={(e) => {
-                setFormData({ ...formData, name: e.target.value });
-                if (errors.name) setErrors({ ...errors, name: undefined });
-              }}
-              error={errors.name}
-              placeholder="예: 체스트프레스"
-              disabled={isSaving}
-              fullWidth
-            />
-
-            <Select
-              label="부위 *"
-              value={formData.category}
-              onChange={(e) => setFormData({ ...formData, category: e.target.value as ExerciseCategory })}
-              options={categoryOptions}
-              disabled={isSaving}
-              fullWidth
-            />
-
-            <Select
-              label="기구 *"
-              value={formData.equipmentType}
-              onChange={(e) => setFormData({ ...formData, equipmentType: e.target.value as EquipmentType })}
-              options={equipmentOptions}
-              disabled={isSaving}
-              fullWidth
-            />
-
-            <RadioGroup
-              label="무게 단위 *"
-              name="weightUnit"
-              value={formData.defaultWeightUnit}
-              onChange={(value) => setFormData({ ...formData, defaultWeightUnit: value as WeightUnit })}
-              options={weightUnitOptions}
-              orientation="horizontal"
-              disabled={isSaving}
-            />
-
-            <Textarea
-              label="메모"
-              value={formData.notes}
-              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              placeholder="운동 설명이나 팁을 입력하세요"
-              disabled={isSaving}
-              resize="vertical"
-              fullWidth
-            />
-          </Form>
-        </Card>
-      </div>
-
-      <div style={bottomBarStyle}>
-        <div style={bottomBarContentStyle}>
+    <CenteredCardLayout
+      maxWidth="420px"
+      header={<PageHeader title="운동 추가" layout="centered" />}
+      footer={
+        <div style={footerButtonsStyle}>
           <Button variant="outline" onClick={handleCancel} fullWidth>
             취소
           </Button>
@@ -191,7 +99,62 @@ export default function NewExerciseTemplatePage() {
             추가하기
           </Button>
         </div>
-      </div>
-    </div>
+      }
+      hasFixedFooter={true}
+    >
+      <Form onSubmit={handleSave} gap="md">
+        <Input
+          label="운동명 *"
+          type="text"
+          value={formData.name}
+          onChange={(e) => {
+            setFormData({ ...formData, name: e.target.value });
+            if (errors.name) setErrors({ ...errors, name: undefined });
+          }}
+          error={errors.name}
+          placeholder="예: 체스트프레스"
+          disabled={isSaving}
+          fullWidth
+        />
+
+        <Select
+          label="부위 *"
+          value={formData.category}
+          onChange={(e) => setFormData({ ...formData, category: e.target.value as ExerciseCategory })}
+          options={categoryOptions}
+          disabled={isSaving}
+          fullWidth
+        />
+
+        <Select
+          label="기구 *"
+          value={formData.equipmentType}
+          onChange={(e) => setFormData({ ...formData, equipmentType: e.target.value as EquipmentType })}
+          options={equipmentOptions}
+          disabled={isSaving}
+          fullWidth
+        />
+
+        <RadioGroup
+          label="무게 단위 *"
+          name="weightUnit"
+          value={formData.defaultWeightUnit}
+          onChange={(value) => setFormData({ ...formData, defaultWeightUnit: value as WeightUnit })}
+          options={weightUnitOptions}
+          orientation="horizontal"
+          disabled={isSaving}
+        />
+
+        <Textarea
+          label="메모"
+          value={formData.notes}
+          onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+          placeholder="운동 설명이나 팁을 입력하세요"
+          disabled={isSaving}
+          resize="vertical"
+          fullWidth
+        />
+      </Form>
+    </CenteredCardLayout>
   );
 }

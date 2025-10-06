@@ -107,17 +107,17 @@ AI 기반 운동 추천 모듈 프로젝트 설정
 
 ### UI 컴포넌트
 
-#### LoginForm.tsx
-- 이메일/비밀번호 로그인
-- 자동 로그인 설정
-- 폼 유효성 검증
-- 애플워치 스타일 디자인
-- 다크모드 지원
+#### 레이아웃
+- **CenteredCardLayout**: 중앙 정렬 카드 (header/footer 슬롯, 고정 footer)
+- **AuthLayout**: CenteredCardLayout 래퍼 (로고 헤더)
+- **PageHeader**: 페이지 헤더 (centered/default 레이아웃)
 
-#### ThemeContext.tsx
-- 다크/라이트 모드 전환
-- 시스템 테마 감지
-- 테마 설정 저장
+#### 폼
+- **Input, Select, Textarea, RadioGroup**: 16px 레이블, 네온 그린 필수 표시(*)
+- **LoginForm**: 이메일/비밀번호, 자동 로그인
+
+#### 테마
+- **ThemeContext**: 다크/라이트 모드, 시스템 테마 감지
 
 ### 디자인 시스템
 - 애플워치 운동 앱 스타일

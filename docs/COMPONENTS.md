@@ -15,7 +15,9 @@
 | **Form/FormGroup/FormRow** | gap, children | 레이아웃 관리 |
 | **Divider** | text, orientation(horizontal/vertical) | 구분선 |
 | **Logo** | size, animated, title, subtitle | 브랜드 |
-| **AuthLayout** | maxWidth(420px 기본) | 인증 페이지 레이아웃 |
+| **CenteredCardLayout** | header, footer, hasFixedFooter, maxWidth(420px 기본) | 중앙 정렬 카드 레이아웃 (header/footer 슬롯) |
+| **AuthLayout** | maxWidth(420px 기본) | CenteredCardLayout 래퍼 (로고 헤더 포함) |
+| **PageHeader** | title, action, layout(default/centered), sticky | 페이지 헤더 (일관된 디자인) |
 | **NavigationBar** | items, activeItem, onItemClick | 하단 고정, SVG 아이콘 |
 
 ## 운동 컴포넌트
@@ -36,42 +38,35 @@
 
 ## 사용 예제
 
-### 기본 UI
+### 레이아웃
 ```typescript
-import { Button, Input, Select, Textarea, RadioGroup, Card } from '@/components/ui';
+import { CenteredCardLayout, PageHeader, Button } from '@/components/ui';
 
-<Card padding="lg" variant="elevated">
-  <Input
-    label="이메일"
-    type="email"
-    size="md"
-    leftIcon={<Icon />}
-  />
-  <Select
-    label="부위"
-    options={[
-      { value: 'CHEST', label: '가슴' },
-      { value: 'BACK', label: '등' }
-    ]}
-  />
-  <RadioGroup
-    label="무게 단위"
-    name="weightUnit"
-    value={selectedUnit}
-    onChange={(value) => setSelectedUnit(value)}
-    options={[
-      { value: 'kg', label: 'kg' },
-      { value: 'lbs', label: 'lbs' }
-    ]}
-    orientation="horizontal"
-  />
-  <Textarea
-    label="메모"
-    placeholder="설명 입력"
-    resize="vertical"
-  />
-  <Button variant="primary" fullWidth>저장</Button>
-</Card>
+<CenteredCardLayout
+  maxWidth="420px"
+  header={<PageHeader title="제목" layout="centered" />}
+  footer={<Button variant="primary" fullWidth>저장</Button>}
+  hasFixedFooter={true}
+>
+  {/* 폼 내용 */}
+</CenteredCardLayout>
+```
+
+### 폼 입력
+```typescript
+import { Input, Select, RadioGroup, Textarea } from '@/components/ui';
+
+<Input label="이메일 *" type="email" size="md" />
+<Select label="부위 *" options={[{ value: 'CHEST', label: '가슴' }]} />
+<RadioGroup
+  label="무게 단위 *"
+  name="unit"
+  value={unit}
+  onChange={setUnit}
+  options={[{ value: 'kg', label: 'kg' }]}
+  orientation="horizontal"
+/>
+<Textarea label="메모" resize="vertical" />
 ```
 
 ### 운동 입력
@@ -160,4 +155,4 @@ getAllWorkoutSessions(): Promise<WorkoutSession[]>
 - ✅ 키보드: Tab/Enter/Space
 - ✅ 대비율: 4.5:1+
 
-**최종 업데이트**: 2025-10-06 (Select, Textarea, Radio, RadioGroup 컴포넌트 추가)
+**최종 업데이트**: 2025-10-06 (CenteredCardLayout, PageHeader 컴포넌트 추가, 레이블 16px 통일)
