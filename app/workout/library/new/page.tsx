@@ -75,7 +75,7 @@ export default function NewExerciseTemplatePage() {
   const contentStyle: React.CSSProperties = {
     width: '100%',
     maxWidth: '420px',
-    padding: `0 ${spacing[4]}`,
+    padding: `${spacing[8]} ${spacing[4]} 0`,
     display: 'flex',
     flexDirection: 'column',
     gap: spacing[4],
@@ -119,10 +119,10 @@ export default function NewExerciseTemplatePage() {
 
   return (
     <div style={containerStyle}>
-      <PageHeader title="운동 추가" layout="centered" sticky />
-
       <main style={contentStyle}>
         <Card variant="default" padding="lg">
+          <PageHeader title="운동 추가" layout="centered" />
+
           <Form onSubmit={handleSave} gap="md">
             <Input
               label="운동명 *"

@@ -36,10 +36,8 @@ export function PageHeader({
     top: sticky ? 0 : undefined,
     zIndex: sticky ? 100 : undefined,
     width: '100%',
-    maxWidth: '420px',
-    margin: '0 auto',
     padding: layout === 'centered'
-      ? `0 ${spacing[4]} ${spacing[4]} ${spacing[4]}`
+      ? `0 0 ${spacing[6]} 0`
       : `${spacing[5]} ${spacing[4]}`,
     background: sticky ? (isDark ? colors.dark.background : colors.light.background) : 'transparent',
   };
