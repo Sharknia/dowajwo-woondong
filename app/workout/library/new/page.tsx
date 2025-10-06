@@ -68,18 +68,15 @@ export default function NewExerciseTemplatePage() {
     background: isDark ? colors.dark.background : colors.light.background,
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center',
+    padding: spacing[4],
     paddingBottom: '120px',
   };
 
   const contentStyle: React.CSSProperties = {
     width: '100%',
     maxWidth: '420px',
-    padding: `${spacing[8]} ${spacing[4]} 0`,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: spacing[4],
-    flex: 1,
   };
 
   const bottomBarStyle: React.CSSProperties = {
@@ -119,8 +116,8 @@ export default function NewExerciseTemplatePage() {
 
   return (
     <div style={containerStyle}>
-      <main style={contentStyle}>
-        <Card variant="default" padding="lg">
+      <div style={contentStyle}>
+        <Card>
           <PageHeader title="운동 추가" layout="centered" />
 
           <Form onSubmit={handleSave} gap="md">
@@ -177,7 +174,7 @@ export default function NewExerciseTemplatePage() {
             />
           </Form>
         </Card>
-      </main>
+      </div>
 
       <div style={bottomBarStyle}>
         <div style={bottomBarContentStyle}>
