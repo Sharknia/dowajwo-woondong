@@ -2,11 +2,9 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
-import { PageHeader } from '@/components/ui/PageHeader';
+import { Button, Card, PageHeader, Input, Select, Textarea, Form, FormGroup } from '@/components/ui';
 import { useTheme } from '@/contexts/ThemeContext';
-import { colors, spacing, typography } from '@/lib/design-system';
+import { colors, spacing } from '@/lib/design-system';
 import { createExerciseTemplate } from '@/lib/api/exercise-template';
 import { ExerciseCategory, EquipmentType, WeightUnit } from '@/types/exercise-template';
 
@@ -23,10 +21,23 @@ export default function NewExerciseTemplatePage() {
     notes: '',
   });
   const [isSaving, setIsSaving] = useState(false);
+  const [errors, setErrors] = useState<{ name?: string }>({});
 
-  const handleSave = async () => {
+  const validateForm = () => {
+    const newErrors: { name?: string } = {};
+
     if (!formData.name.trim()) {
-      alert('운동명을 입력해주세요.');
+      newErrors.name = '운동명을 입력해주세요';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
       return;
     }
 
@@ -61,7 +72,6 @@ export default function NewExerciseTemplatePage() {
     paddingBottom: '120px',
   };
 
-
   const contentStyle: React.CSSProperties = {
     width: '100%',
     maxWidth: '420px',
@@ -70,16 +80,6 @@ export default function NewExerciseTemplatePage() {
     flexDirection: 'column',
     gap: spacing[4],
     flex: 1,
-  };
-
-  const inputStyle: React.CSSProperties = {
-    width: '100%',
-    background: isDark ? colors.dark.surfaceSecondary : colors.light.surfaceSecondary,
-    border: 'none',
-    borderRadius: '8px',
-    padding: `${spacing[3]} ${spacing[3]}`,
-    fontSize: typography.fontSize.base,
-    color: isDark ? colors.text.dark.primary : colors.text.light.primary,
   };
 
   const bottomBarStyle: React.CSSProperties = {
@@ -102,77 +102,60 @@ export default function NewExerciseTemplatePage() {
     gap: spacing[2],
   };
 
+  const categoryOptions = Object.entries(ExerciseCategory).map(([key, value]) => ({
+    value: key,
+    label: value,
+  }));
+
+  const equipmentOptions = Object.entries(EquipmentType).map(([key, value]) => ({
+    value: key,
+    label: value,
+  }));
+
   return (
     <div style={containerStyle}>
       <PageHeader title="운동 추가" layout="centered" sticky />
 
       <main style={contentStyle}>
         <Card variant="default" padding="lg">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[3] }}>
-            <div>
-              <label style={{
-                fontSize: typography.fontSize.sm,
-                color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-                marginBottom: spacing[2],
-                display: 'block',
-              }}>
-                운동명 *
-              </label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="예: 체스트프레스"
-                style={inputStyle}
-              />
-            </div>
+          <Form onSubmit={handleSave} gap="md">
+            <Input
+              label="운동명 *"
+              type="text"
+              value={formData.name}
+              onChange={(e) => {
+                setFormData({ ...formData, name: e.target.value });
+                if (errors.name) setErrors({ ...errors, name: undefined });
+              }}
+              error={errors.name}
+              placeholder="예: 체스트프레스"
+              disabled={isSaving}
+              fullWidth
+            />
 
-            <div>
-              <label style={{
-                fontSize: typography.fontSize.sm,
-                color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-                marginBottom: spacing[2],
-                display: 'block',
-              }}>
-                부위 *
-              </label>
-              <select
-                value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value as ExerciseCategory })}
-                style={inputStyle}
-              >
-                {Object.entries(ExerciseCategory).map(([key, value]) => (
-                  <option key={key} value={key}>{value}</option>
-                ))}
-              </select>
-            </div>
+            <Select
+              label="부위 *"
+              value={formData.category}
+              onChange={(e) => setFormData({ ...formData, category: e.target.value as ExerciseCategory })}
+              options={categoryOptions}
+              disabled={isSaving}
+              fullWidth
+            />
 
-            <div>
-              <label style={{
-                fontSize: typography.fontSize.sm,
-                color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-                marginBottom: spacing[2],
-                display: 'block',
-              }}>
-                기구 *
-              </label>
-              <select
-                value={formData.equipmentType}
-                onChange={(e) => setFormData({ ...formData, equipmentType: e.target.value as EquipmentType })}
-                style={inputStyle}
-              >
-                {Object.entries(EquipmentType).map(([key, value]) => (
-                  <option key={key} value={key}>{value}</option>
-                ))}
-              </select>
-            </div>
+            <Select
+              label="기구 *"
+              value={formData.equipmentType}
+              onChange={(e) => setFormData({ ...formData, equipmentType: e.target.value as EquipmentType })}
+              options={equipmentOptions}
+              disabled={isSaving}
+              fullWidth
+            />
 
-            <div>
+            <FormGroup gap="sm">
               <label style={{
-                fontSize: typography.fontSize.sm,
-                color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-                marginBottom: spacing[2],
-                display: 'block',
+                fontSize: '14px',
+                fontWeight: 500,
+                color: isDark ? colors.text.dark.primary : colors.text.light.primary,
               }}>
                 무게 단위 *
               </label>
@@ -182,7 +165,7 @@ export default function NewExerciseTemplatePage() {
                   alignItems: 'center',
                   gap: spacing[2],
                   cursor: 'pointer',
-                  fontSize: typography.fontSize.base,
+                  fontSize: '16px',
                   color: isDark ? colors.text.dark.primary : colors.text.light.primary,
                 }}>
                   <input
@@ -190,6 +173,7 @@ export default function NewExerciseTemplatePage() {
                     value={WeightUnit.KG}
                     checked={formData.defaultWeightUnit === WeightUnit.KG}
                     onChange={() => setFormData({ ...formData, defaultWeightUnit: WeightUnit.KG })}
+                    disabled={isSaving}
                   />
                   kg
                 </label>
@@ -198,7 +182,7 @@ export default function NewExerciseTemplatePage() {
                   alignItems: 'center',
                   gap: spacing[2],
                   cursor: 'pointer',
-                  fontSize: typography.fontSize.base,
+                  fontSize: '16px',
                   color: isDark ? colors.text.dark.primary : colors.text.light.primary,
                 }}>
                   <input
@@ -206,33 +190,23 @@ export default function NewExerciseTemplatePage() {
                     value={WeightUnit.LBS}
                     checked={formData.defaultWeightUnit === WeightUnit.LBS}
                     onChange={() => setFormData({ ...formData, defaultWeightUnit: WeightUnit.LBS })}
+                    disabled={isSaving}
                   />
                   lbs
                 </label>
               </div>
-            </div>
+            </FormGroup>
 
-            <div>
-              <label style={{
-                fontSize: typography.fontSize.sm,
-                color: isDark ? colors.text.dark.secondary : colors.text.light.secondary,
-                marginBottom: spacing[2],
-                display: 'block',
-              }}>
-                메모
-              </label>
-              <textarea
-                value={formData.notes}
-                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                placeholder="운동 설명이나 팁을 입력하세요"
-                style={{
-                  ...inputStyle,
-                  minHeight: '100px',
-                  resize: 'vertical' as const,
-                }}
-              />
-            </div>
-          </div>
+            <Textarea
+              label="메모"
+              value={formData.notes}
+              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+              placeholder="운동 설명이나 팁을 입력하세요"
+              disabled={isSaving}
+              resize="vertical"
+              fullWidth
+            />
+          </Form>
         </Card>
       </main>
 

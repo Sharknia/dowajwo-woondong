@@ -6,6 +6,8 @@
 |---------|-------|------|
 | **Button** | variant(primary/secondary/outline/ghost), size(sm/md/lg), isLoading, fullWidth | ARIA: aria-busy, aria-disabled |
 | **Input** | label, error, success, hint, size(sm/md/lg), leftIcon, rightIcon, onRightIconClick | ARIA: aria-invalid, aria-describedby |
+| **Select** | label, error, hint, size(sm/md/lg), options, fullWidth | ARIA: aria-invalid, aria-describedby |
+| **Textarea** | label, error, hint, size(sm/md/lg), resize(none/vertical/horizontal/both), fullWidth | ARIA: aria-invalid, aria-describedby |
 | **Checkbox** | label, size(sm/md/lg), error | ARIA: aria-invalid |
 | **Card** | padding(sm/md/lg/xl), variant(default/elevated/outlined), onClick | 클릭 시 role="button" |
 | **Form/FormGroup/FormRow** | gap, children | 레이아웃 관리 |
@@ -34,7 +36,7 @@
 
 ### 기본 UI
 ```typescript
-import { Button, Input, Card } from '@/components/ui';
+import { Button, Input, Select, Textarea, Card } from '@/components/ui';
 
 <Card padding="lg" variant="elevated">
   <Input
@@ -42,6 +44,18 @@ import { Button, Input, Card } from '@/components/ui';
     type="email"
     size="md"
     leftIcon={<Icon />}
+  />
+  <Select
+    label="부위"
+    options={[
+      { value: 'CHEST', label: '가슴' },
+      { value: 'BACK', label: '등' }
+    ]}
+  />
+  <Textarea
+    label="메모"
+    placeholder="설명 입력"
+    resize="vertical"
   />
   <Button variant="primary" fullWidth>로그인</Button>
 </Card>
@@ -133,4 +147,4 @@ getAllWorkoutSessions(): Promise<WorkoutSession[]>
 - ✅ 키보드: Tab/Enter/Space
 - ✅ 대비율: 4.5:1+
 
-**최종 업데이트**: 2025-10-01
+**최종 업데이트**: 2025-10-06 (Select, Textarea 컴포넌트 추가)
